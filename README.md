@@ -1,4 +1,4 @@
-# Tycoon (name to be voted!) – Igloo CAVE edition
+# Monster Tycoon – Igloo CAVE edition
 
 A Monopoly-style learning game for the Igloo CAVE webview layer.
 Canvas size: **12,566 × 4,516 px** (8 wall projectors + 2 floor projectors).
@@ -7,22 +7,25 @@ Canvas size: **12,566 × 4,516 px** (8 wall projectors + 2 floor projectors).
 
 | File | What it is |
 |---|---|
-| `index.html` | The whole game. One file, no installs, includes the sample questions. |
+| `index.html` | The whole game, including the sample questions. |
+| `assets/audio/` | Host voice lines and sound effects (ElevenLabs). |
+| `assets/characters/` | Optional character images that replace the built-in monsters. |
+| `src/` | Source: edit `index.template.html` or `build.py`, then run `python3 src/build.py`. |
 | `questions.xlsx` | The question bank template (also holds team names, topic names and settings). |
 | `README.md` | This guide. |
 
 ## Put it on GitHub Pages
 
-1. Create a new repository on GitHub (e.g. `cave-tycoon`).
-2. Upload `index.html` and `questions.xlsx` (Add file → Upload files → Commit).
-3. Go to **Settings → Pages**. Under *Build and deployment*, choose **Deploy from a branch**, branch **main**, folder **/ (root)**. Save.
-4. After a minute your game is live at `https://<your-username>.github.io/cave-tycoon/`.
+1. Go to **Settings → Pages**. Under *Build and deployment*, choose **Deploy from a branch**, branch **main**, folder **/ (root)**. Save.
+2. After a minute or two the game is live at https://jonathanwalsh1999.github.io/MonopolyStyleBoardGameForIglooCAVE/
 
 Notes:
 - On a free GitHub account the repository needs to be **public** for Pages. The site is public either way, so never put learner names or results in the repo.
 - Ask college IT to check `github.io` isn't blocked on the Igloo PC.
 
 ## Set it up in the Igloo
+
+Sound: the first tap on the setup screen unlocks audio in the browser.
 
 1. Add a **WebView layer** in Igloo Control and point it at the GitHub Pages URL (or the local file).
 2. Set the webview resolution to **12566 × 4516**, the same canvas as the projector map.
@@ -39,6 +42,15 @@ Two ways to load it:
   You can also point at a different file with `?q=other-file.xlsx`.
 
 Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level questions shared across a unit, and are good for the harder house questions. The other codes are `HUB1`–`HUB4`, `MATHS`, `ENGLISH`, `POPQUIZ`, `REALWORLD`, `REVISION`, `BONUS` and `ANY`.
+
+## Monsters, sound and dice
+
+- **Monsters:** on the setup screen, tap the monsters that are playing (2–6). The order you tap them is the turn order. To use your own artwork, see `assets/characters/README.md`.
+- **Sound:** the game-show host and sound effects were made with ElevenLabs and live in `assets/audio`. Use the **Sound: on/off** button on the back wall to mute them. If a clip is missing, the game plays a simple built-in beep instead.
+- **Dice:** press **Roll dice** for the on-screen 3D dice, or **Physical dice** to type in the total from your real dice (2–12).
+
+### Replacing a sound
+Upload an MP3 to `assets/audio` with the same file name as the one you're replacing (for example `host_buy_1.mp3`).
 
 ## The rules (as built)
 
@@ -60,3 +72,4 @@ Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level quest
 
 - The rounded font loads from Google Fonts. Offline, it falls back to Arial, which works fine.
 - There's no save/resume: refreshing the page restarts the game.
+- Running from a double-clicked file works, but the Excel file won't auto-load; use the **Load Excel file** button.

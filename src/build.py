@@ -3,10 +3,10 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.worksheet.datavalidation import DataValidation
 
-OUT = "out"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 os.makedirs(OUT, exist_ok=True)
 
-SETTINGS = {"name": "Tycoon (name to be voted!)", "start": 1500, "go": 200, "minutes": 60}
+SETTINGS = {"name": "Monster Tycoon", "start": 1500, "go": 200, "minutes": 60}
 TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"]
 NAMES = {
     "U1": "Science", "1A": "The Solar System", "1B": "The Human Body",
@@ -113,7 +113,7 @@ for n, (topic, lvl, q, a, b, c, d, ans, exp) in enumerate(Q):
 data = {"settings": SETTINGS, "teams": TEAMS, "names": NAMES, "questions": questions}
 
 # ---- HTML ----
-html = open("src/index.template.html", encoding="utf-8").read()
+html = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"index.template.html"), encoding="utf-8").read()
 assert "/*__SAMPLE_DATA__*/null" in html
 html = html.replace("/*__SAMPLE_DATA__*/null", json.dumps(data, ensure_ascii=False))
 open(f"{OUT}/index.html", "w", encoding="utf-8").write(html)
@@ -135,15 +135,14 @@ ws.column_dimensions["A"].width = 110
 lines = [
  ("How to use this question bank", Font(bold=True, size=16)),
  ("1. Settings: game name, starting money, money for passing GO, default minutes.", None),
- ("2. Teams: up to 6 team names (blank = 'Team 1' etc.).", None),
- ("3. Names: rename the 8 units (U1–U8), the 22 property topics (1A–8B), the 4 skills hubs and the Maths/English squares.", None),
- ("4. Questions: one row per question. Topic must be a code from the Names sheet, or one of: HUB, POPQUIZ, REALWORLD, REVISION, BONUS, ANY.", None),
+ ("2. Names: rename the 8 units (U1–U8), the 22 property topics (1A–8B), the 4 skills hubs and the Maths/English squares.", None),
+ ("3. Questions: one row per question. Topic must be a code from the Names sheet, or one of: HUB, POPQUIZ, REALWORLD, REVISION, BONUS, ANY.", None),
  ("   Level 1 = buying a property. Level 2 = houses 1–2. Level 3 = houses 3–4. (Hotels are a 'teach it back' challenge, no question needed.)", None),
  ("   Put level 2–3 questions on the unit code (e.g. U3) so they're shared by every topic in that unit, or on a topic code (e.g. 3A).", None),
  ("   Answer: the letter A–D. For open questions, leave the options blank and type the answer text instead.", None),
  ("   Pop quiz: use True/False in options A and B.", None),
- ("5. Missing questions? The game falls back: topic → unit → ANY. Aim for at least 2 questions per topic.", None),
- ("6. Save the file, then in the game press 'Load Excel file' on the setup screen.", None),
+ ("4. Missing questions? The game falls back: topic → unit → ANY. Aim for at least 2 questions per topic.", None),
+ ("5. Save the file, then in the game press 'Load Excel file' on the setup screen.", None),
  ("   On GitHub Pages, a file named questions.xlsx next to index.html loads automatically.", None),
  ("", None),
  ("Don't rename the sheets or the column headings — the game looks for them by name.", Font(bold=True, color="A3171B")),
@@ -156,8 +155,6 @@ ws = wb.create_sheet("Settings"); header(ws, ["Setting", "Value"], [22, 40])
 for k, v in [("Game name", SETTINGS["name"]), ("Starting money", 1500), ("GO money", 200), ("Minutes", 60)]:
     ws.append([k, v])
 
-ws = wb.create_sheet("Teams"); header(ws, ["Team", "Team name"], [10, 30])
-for i, t in enumerate(TEAMS, 1): ws.append([i, t])
 
 ws = wb.create_sheet("Names"); header(ws, ["Code", "Name", "What it is"], [10, 34, 40])
 for code, name in NAMES.items():
