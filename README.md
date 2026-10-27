@@ -61,14 +61,7 @@ Open questions with no options stay on the wall only. Turn the floor zones off w
 ## Keeping the whole room in it (v9)
 
 - **Steal it:** if a team gets a *buy* question wrong, the answer isn't revealed. Instead the other teams race to stand on the right answer on the floor (20 seconds). The tutor taps **"<Team> steals it"** for the first team on the right zone, and that team buys the square at its price. Only teams that can afford it are offered.
-- **Confidence bet:** for buy, rent challenge, house, Pop Quiz and Real World questions, the question appears first and the options follow 10 seconds later. A team that already knows the answer can press **🔥 Confident ×2** before the options show, to win big or lose big:
-  - Buy: 25% off, or a full-price penalty if wrong.
-  - House: half price, or the full cost as a penalty if wrong.
-  - Rent challenge: the owner pays *you*, or you pay four times the rent if wrong.
-  - Pop Quiz: £200, or −£100 if wrong.
-  - Real World: £300, or −£150 if wrong.
-  **Show options** skips the wait.
-- **⚡ Speed bonus / 🔥 Confidence bonus (+£50):** any correct answer in the first 10 seconds earns an extra £50. A correct answer after going 🔥 Confident always earns it too, on top of the double reward, because the team committed before seeing the options. Usually that means answering from memory before the options appear. Just tap **✓ Correct** as soon as they say it.
+- **⚡ Say it early (+£50):** for buy, rent challenge, house, Pop Quiz and Real World questions, the question appears first and the options follow 10 seconds later. A team that says the right answer before the options appear (within 10 seconds) wins £50 extra. The tutor just taps **✓ Correct** as soon as they say it. **Show options now** skips the wait.
 - **Explain why (+£50):** after a correct answer, the explanation stays hidden while the team explains *why* it's right. The tutor taps **✓ Explained why** (+£50) or **Skip**, and then the explanation appears.
 - **Comeback questions:** questions anyone gets wrong go into a pile. They come back in Pop Quiz and the Revision Room (marked *Comeback question*), so the class gets a second go at what it didn't know.
 - **Breaking news:** every 10 minutes, a market event hits everyone. Some last one round:
@@ -87,8 +80,7 @@ Open questions with no options stay on the wall only. Turn the floor zones off w
 ## Everything in plain pounds
 
 Students never have to work out "half", "double" or "dice × 8" themselves:
-- **Every question card shows the outcomes in pounds** before anyone answers, for example *✓ Pay £450 and own it · ✗ Pay a £230 fine · 🐔 Chicken out: £110 fine*. Confident mode shows its own amounts.
-- **Rent always says why**, for example *"Rent is £100 (they own 2 hubs)"* or *"Rent is £56 (you rolled 7, and 7 × £8 = £56)"*, plus exactly what a challenge would cost.
+- **Every question card shows the outcomes in pounds** before anyone answers, for example *✓ Pay £450 and own it · ✗ Pay a £230 fine · 🐔 Chicken out: £110 fine*. - **Rent always says why**, for example *"Rent is £100 (they own 2 hubs)"* or *"Rent is £56 (you rolled 7, and 7 × £8 = £56)"*, plus exactly what a challenge would cost.
 - **Fines are rounded to the nearest £10.**
 - The **This square** panel uses three plain lines instead of a table of numbers.
 
