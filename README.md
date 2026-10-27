@@ -46,10 +46,25 @@ Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level quest
 
 ## Companies, sound and dice
 
-- **Companies:** teams play as six parody companies (Amazoom, Costalot Coffee, Greggles, TokTik, Primarket, Nandoughs). On the setup screen, tap the ones playing (2–6); the order you tap is the turn order. To use your own logos, see `assets/logos/README.md`.
-- **Host and sound:** a dry, witty British host plus sound effects, all made with ElevenLabs and stored in `assets/audio`. **Sound: on/off** mutes everything.
-- **Music:** a lo-fi city soundtrack is generated live in the browser (no file needed). It starts on the first tap, gets quieter while the host speaks or a question is up, and has its own **Music: on/off** button.
+- **Intro:** on the setup screen, pick the companies, then press **▶ Play intro**. It's a ~80-second movie-trailer cold open: a voiceover, a company roll call with logos slamming onto every wall, rapid-fire rules, and a "shout the answer" warm-up for the whole room. It then opens the market automatically. **Skip intro ›** jumps straight in, and **Skip to game** skips it entirely.
+- **Companies:** teams play as six parody companies (Amazoom, Costalot Coffee, Greggles, TokTik, Primarket, Nandoughs). Tap the ones playing (2–6); the order you tap is the turn order. To use your own logos, see `assets/logos/README.md`.
+- **Host:** a dry, witty British host with several versions of each line. He never repeats a recent line and stays quiet on some routine moments so it doesn't get old.
+- **Music:** a lo-fi city soundtrack is generated live in the browser. It gets quieter while the host speaks or a question is up and has its own **Music: on/off** button.
 - **Dice:** **Roll dice** uses the on-screen dice; **Physical dice** lets you tap the total from real dice (2–12).
+
+## Money, loans and the Jackpot
+
+- **Cash vs net worth:** each team panel shows **Cash** (what they can spend) and **Net worth** (cash + property value − debt). Buying a property swaps cash for property, so net worth stays the same; the leaderboard ranks net worth.
+- **Jackpot:** penalties, late fees and chicken-outs go into the Jackpot (it starts at £100). Landing on **Bonus Round** opens a question to every team; the first correct answer wins it all. It's shown on the Bonus Round square, the ticker and the leaderboard.
+- **Loans** (the **Loans** button at the start or end of a turn, or **Get a loan** when a property is unaffordable):
+  - **Bank loan** (£250 or £500): 10% interest per lap, but the team must answer a money question correctly to be approved. A wrong answer costs nothing.
+  - **Payday loan** (£250 or £500): instant, 40% interest per lap, capped once interest reaches 100% of the loan. That mirrors the real UK rule that you never repay more than double what you borrowed, and real payday APRs run into the thousands.
+  - Interest is added every time a team passes GO. Repay any loan from the Loans menu once there's enough cash. Debt counts against net worth.
+
+## Fair turns
+
+- **60 seconds per question.** A countdown shows on the question card and ticks for the last 10 seconds. Running out of time counts as a wrong answer, except for the hotel "teach it back", where the tutor decides.
+- **Equal turns:** when the game clock runs out, the current round finishes, then there's one **Final round** so every company gets one last turn. Every company ends with exactly the same number of turns. This can run a few minutes past the clock, so set the game length a little shorter than the lesson. **End now** on the back wall stops immediately if needed.
 - **Revision Room:** on its turn, a team in the Revision Room presses **Answer to escape**. A correct answer gets them out and they roll straight away. Wrong answers cost nothing. They get one attempt per turn and are released after 3 attempts.
 
 ### Replacing a sound
