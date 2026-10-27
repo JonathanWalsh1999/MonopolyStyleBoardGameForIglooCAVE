@@ -504,7 +504,7 @@ function renderSetup(){const on=S.phase==='setup';['setupL','setupR'].forEach(id
    <div class="setrow">Tap the monsters that are playing (2–6). Order = turn order.</div>
    <div class="pick">${MONSTERS.map(m=>{const o=S.picked.indexOf(m.id);return `<div class="mon${o>=0?' on':''}" onclick="togglePick('${m.id}')">${o>=0?`<span class="ord">${o+1}</span>`:''}<span class="mini">${monster(m.id,o>=0?'happy':'normal')}</span><b>${m.name}</b></div>`}).join('')}</div>
    <div class="setrow">Game length (minutes)</div><div style="display:flex;gap:16px">${[30,45,60,75].map(n=>`<button class="btn sm ${n===S.minutes?'go':''}" style="width:190px;height:96px;font-size:48px" onclick="S.minutes=${n};render()">${n===S.minutes?'✓':''}${n}</button>`).join('')}</div>`;
-  $('setupR').innerHTML=`<h2>Questions</h2><div style="font-size:38px;line-height:1.3">${esc(BANKSRC)}<br><span style="color:#cfd8ff">${BANK.questions.length} questions loaded</span></div><div style="position:absolute;right:30px;bottom:20px;font-size:28px;color:#8f9bc7">Version 3 (stretch fix + grid)</div>
+  $('setupR').innerHTML=`<h2>Questions</h2><div style="font-size:38px;line-height:1.3">${esc(BANKSRC)}<br><span style="color:#cfd8ff">${BANK.questions.length} questions loaded</span></div><div style="position:absolute;right:30px;bottom:20px;font-size:28px;color:#8f9bc7">Version 4 (alignment panel)</div>
    <div style="display:flex;gap:16px;margin-top:24px"><button class="btn alt" style="height:120px;font-size:42px" onclick="$('file').click()">Load Excel file</button></div>
    <div style="display:flex;gap:16px;margin-top:60px"><button class="btn go" style="height:170px;font-size:70px;padding:0 70px" onclick="startGame()">Start game</button></div>`}
 
@@ -568,21 +568,40 @@ for(let i=0;i<40;i++)bubbles.push({x:Math.random()*1424,y:Math.random()*1718,r:2
 
 /* ---------- scale to window ---------- */
 /* Igloo stretches the webview over the whole canvas, so stretch to fill the window exactly
-   (?preview keeps proportions for laptop testing, ?native = 1:1 pixels) */
+   (?preview keeps proportions for laptop testing, ?native = 1:1 pixels).
+   CAL = fine calibration (height scale + vertical offset), set from the grid panel and remembered on this PC. */
+let CAL={sy:1,oy:0};
+try{Object.assign(CAL,JSON.parse(localStorage.getItem('cal')||'{}'))}catch(e){}
+(()=>{const q=new URLSearchParams(location.search);if(q.has('sy'))CAL.sy=+q.get('sy');if(q.has('oy'))CAL.oy=+q.get('oy')})();
 function scaleStage(){const q=new URLSearchParams(location.search);let sx=innerWidth/12566,sy=innerHeight/4516;
   if(q.has('native'))sx=sy=1;else if(q.has('preview'))sx=sy=Math.min(sx,sy);
-  $('stage').style.transform=`scale(${sx},${sy})`}
+  $('stage').style.transform=`translate(0px,${CAL.oy*sy}px) scale(${sx},${sy*CAL.sy})`;showCal()}
+function setCal(dsy,doy,reset){if(reset)CAL={sy:1,oy:0};else{CAL.sy=Math.round((CAL.sy+dsy)*1000)/1000;CAL.oy+=doy}
+  try{localStorage.setItem('cal',JSON.stringify(CAL))}catch(e){}scaleStage()}
+function showCal(){const r=$('calread');if(r)r.innerHTML=`Webview size: <b>${innerWidth} × ${innerHeight}</b> px · pixel ratio ${devicePixelRatio}<br>Height scale: <b>${CAL.sy.toFixed(3)}</b> · Vertical shift: <b>${CAL.oy}</b> px`}
 /* calibration grid matching the Igloo projector map: add ?grid to the URL or press G */
 const PROJ=[[1,0,0,1718,1080],[2,1718,0,1718,1080],[3,3436,0,1424,1080],[4,4860,0,1423,1080],[5,6283,0,1718,1080],[6,8001,0,1718,1080],
   [7,9719,0,1424,1080],[8,11143,0,1423,1080],[9,3436,1080,2847,1718],[10,3436,2798,2847,1718]];
-function toggleGrid(){let g=$('calib');if(g){g.remove();return}g=document.createElement('div');g.id='calib';
+function toggleGrid(){let g=$('calib');if(g){g.remove();$('calpanel').remove();return}g=document.createElement('div');g.id='calib';
   g.style.cssText='position:absolute;left:0;top:0;width:12566px;height:4516px;z-index:999;pointer-events:none';
   g.innerHTML=PROJ.map(([n,x,y,w,h])=>`<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-sizing:border-box;border:6px solid #fff;
     background:repeating-linear-gradient(0deg,transparent 0 98px,rgba(255,255,255,.5) 98px 100px),repeating-linear-gradient(90deg,transparent 0 98px,rgba(255,255,255,.5) 98px 100px)">
     <div style="position:absolute;left:30px;top:30px;font-size:44px;line-height:1.3;background:rgba(0,0,0,.7);padding:10px 18px;color:#fff">Projector ${n}<br>X: ${(x/12566).toFixed(3)} – ${x} px<br>Y: ${(y/4516).toFixed(3)} – ${y} px<br>W: ${w} px · H: ${h} px</div>
-    <div style="position:absolute;left:50%;top:50%;width:${Math.min(w,h)*.5}px;height:${Math.min(w,h)*.5}px;transform:translate(-50%,-50%);border:6px solid #fff;border-radius:50%"></div></div>`).join('');
-  $('stage').appendChild(g)}
-addEventListener('keydown',e=>{if(e.key==='g'||e.key==='G')toggleGrid()});
+    <div style="position:absolute;left:50%;top:50%;width:${Math.min(w,h)*.5}px;height:${Math.min(w,h)*.5}px;transform:translate(-50%,-50%);border:6px solid #fff;border-radius:50%"></div></div>`).join('')+
+    `<div style="position:absolute;left:0;top:1074px;width:12566px;height:12px;background:#ff2e88"></div>`;
+  $('stage').appendChild(g);
+  const c=document.createElement('div');c.id='calpanel';
+  c.style.cssText='position:absolute;left:3536px;top:1300px;width:2647px;z-index:1000;background:rgba(10,14,40,.92);border:8px solid #ff2e88;border-radius:40px;padding:40px;box-sizing:border-box;color:#fff;font-size:60px;line-height:1.3';
+  const B=(t,f)=>`<button class="btn" style="font-size:64px;height:170px;margin:12px" onclick="${f}">${t}</button>`;
+  c.innerHTML=`<div style="font-size:80px;font-weight:600;color:#ffd23f">Alignment</div>
+   <div>The pink line should sit exactly where the walls meet the floor.</div><div id="calread" style="margin:24px 0;color:#cfd8ff"></div>
+   <div>Wall height</div>${B('Taller ++','setCal(.02,0)')}${B('Taller +','setCal(.005,0)')}${B('Shorter −','setCal(-.005,0)')}${B('Shorter −−','setCal(-.02,0)')}
+   <div style="margin-top:20px">Move everything</div>${B('Down ++','setCal(0,40)')}${B('Down +','setCal(0,10)')}${B('Up −','setCal(0,-10)')}${B('Up −−','setCal(0,-40)')}
+   <div style="margin-top:20px">${B('Reset','setCal(0,0,true)')}${B('Close grid','toggleGrid()')}</div>
+   <div style="font-size:44px;color:#cfd8ff;margin-top:16px">Settings are remembered on this PC. Send Claude the numbers above so they can be built in.</div>`;
+  $('stage').appendChild(c);showCal()}
+addEventListener('keydown',e=>{if(e.key==='g'||e.key==='G')toggleGrid();if(!$('calib'))return;
+  const f=e.shiftKey?.001:.01;if(e.key==='ArrowUp')setCal(f,0);if(e.key==='ArrowDown')setCal(-f,0);if(e.key==='PageDown')setCal(0,10);if(e.key==='PageUp')setCal(0,-10)});
 if(new URLSearchParams(location.search).has('grid'))setTimeout(toggleGrid,50);
 addEventListener('resize',scaleStage);scaleStage();
 buildBoard();render();
