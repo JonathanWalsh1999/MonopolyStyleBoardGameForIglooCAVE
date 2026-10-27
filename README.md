@@ -58,6 +58,31 @@ Multiple-choice questions also appear on the **floor** as big zones, one per opt
 
 Open questions with no options stay on the wall only. Turn the floor zones off with **Answers on the floor** on the setup screen (the setting is remembered on that PC).
 
+## Keeping the whole room in it (v9)
+
+- **Steal it:** if a team gets a *buy* question wrong, the answer isn't revealed. Instead the other teams race to stand on the right answer on the floor (20 seconds). The tutor taps **"<Team> steals it"** for the first team on the right zone, and that team buys the square at its price. Only teams that can afford it are offered.
+- **Confidence bet:** for buy, rent challenge, house, Pop Quiz and Real World questions, the question appears first and the options follow 10 seconds later. A team that already knows the answer can press **🔥 Confident ×2** before the options show, to win big or lose big:
+  - Buy: 25% off, or a full-price penalty if wrong.
+  - House: half price, or the full cost as a penalty if wrong.
+  - Rent challenge: the owner pays *you*, or you pay four times the rent if wrong.
+  - Pop Quiz: £200, or −£100 if wrong.
+  - Real World: £300, or −£150 if wrong.
+  **Show options** skips the wait.
+- **Explain why (+£50):** after a correct answer, the explanation stays hidden while the team explains *why* it's right. The tutor taps **✓ Explained why** (+£50) or **Skip**, and then the explanation appears.
+- **Comeback questions:** questions anyone gets wrong go into a pile. They come back in Pop Quiz and the Revision Room (marked *Comeback question*), so the class gets a second go at what it didn't know.
+- **Breaking news:** every 10 minutes, a market event hits everyone. Some last one round:
+  - Rent strike
+  - Economic boom (double GO money)
+  - Property crash (25% off)
+  - Housing shortage (double rent)
+
+  Others happen instantly:
+  - Interest rates rise
+  - Windfall tax (10% of cash)
+  - Government grant (+£200)
+  The active event shows on the turn panel.
+- **Class debrief:** when the game ends, press **Most-missed questions** to see the 5 questions the class got wrong most, with the right answers. It's handy for a 2-minute recap.
+
 ## Money, loans and the Jackpot
 
 - **Cash is king:** the winner is the team with the most **cash minus debt** when the market closes. Property is worth nothing at the end: it only earns rent while the game runs. So buy squares that will pay back in time, and don't borrow more than you can repay.
