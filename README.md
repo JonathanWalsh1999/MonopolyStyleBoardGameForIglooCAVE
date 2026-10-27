@@ -29,8 +29,9 @@ Sound: the first tap on the setup screen unlocks audio in the browser.
 
 1. Add a **WebView layer** in Igloo Control and point it at the GitHub Pages URL (or the local file).
 2. Set the webview resolution to **12566 × 4516**, the same canvas as the projector map.
-3. The page scales itself to the window, so it also works on a laptop for testing. Add `?native` to the URL to force 1:1 pixels.
-4. Control everything with the cast mouse from the Igloo tablet. All buttons are on the **front wall**, with Pause / End game / Export on the **back wall**.
+3. The page stretches to fill the webview exactly, the same way Igloo maps the canvas onto the walls. On a laptop, add `?preview` to the URL to keep the proportions, or `?native` for 1:1 pixels.
+4. **Alignment check:** add `?grid` to the URL, or press **G**, to show the projector test grid (same layout as Igloo's test pattern) over the game. Press G again to hide it.
+5. Control everything with the cast mouse from the Igloo tablet. All buttons are on the **front wall**, with Pause / End game / Export on the **back wall**.
 
 ## Changing the questions
 
