@@ -671,7 +671,7 @@ function exportCSV(){const cols=['time','team','category','topic','type','questi
 function buildBoard(){let h='';
   BOARD.forEach((b,i)=>{const g=sqGeom(i);let cls='sq',inner='';
     if(b.t==='prop')inner=`<div class="strip" style="background:${UNITCOL[b.u]};color:${UNITTXT[b.u]}">UNIT ${b.u} · ${esc(nm('U'+b.u)).toUpperCase()}</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(price(i))} <span class="rn">· rent ${money(PR[b.c][1])}</span></div>`;
-    else if(b.t==='hub')inner=`<div class="strip" style="background:#E8ECF8;color:#0a0f1c">SKILLS HUB</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(HUB_PRICE)} <span class="rn">· rent ${money(HUB_RENT[0])}+</span></div>`;
+    else if(b.t==='hub')inner=`<div class="strip" style="background:#E8ECF8;color:#0a0f1c">SKILLS HUB</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(HUB_PRICE)} <span class="rn">· rent from ${money(HUB_RENT[0])}</span></div>`;
     else if(b.t==='util')inner=`<div class="strip" style="background:#6B7280;color:#fff">FUNCTIONAL SKILLS</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(UTIL_PRICE)} <span class="rn">· dice × 8</span></div>`;
     else{cls+=i%10===0?' corner':' special';
       const t={go:['GO','Collect '+money(BANK.settings.go||200)+' as you pass'],jail:['Revision Room','Just visiting? Relax.<br>Sent here? Answer to escape'],bonus:['Bonus Round','Jackpot: <span class="pot"></span>'],gojail:['Go to the Revision Room',''],pop:['Pop quiz','Correct = +£100'],real:['Real world','Workplace scenario'],tax:['Late fee','Pay '+money(b.amt||0)],life:['Life happens','Bills, fines… and the odd windfall']}[b.t];
