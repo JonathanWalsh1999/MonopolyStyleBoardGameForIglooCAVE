@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tycoon – Igloo CAVE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Fredoka','Arial Rounded MT Bold',Arial,sans-serif;color:#fff}
+#stage{position:absolute;left:0;top:0;width:12566px;height:4516px;transform-origin:0 0}
+.wall{position:absolute;top:0;height:1080px;background:#16213e}
+#floor{position:absolute;left:3436px;top:1080px;width:2847px;height:3436px}
+.sq{position:absolute;top:0;height:380px;box-sizing:border-box;border-right:4px solid #0b1020;border-bottom:6px solid #0b1020;background:#fdf6e3;color:#1b1b2f;overflow:hidden}
+.sq .strip{height:72px;font-size:30px;font-weight:600;padding:16px 14px 0;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sq .nm{padding:10px 14px 0;font-weight:600;line-height:1.08;height:128px;overflow:hidden;font-size:38px}
+.sq .pr{padding:2px 14px 0;font-size:30px}
+.sq .tok{position:absolute;left:10px;right:10px;top:236px;height:66px;display:flex;gap:4px}
+.tk{flex:0 0 40px;height:60px;border-radius:50% 50% 10px 10px;border:4px solid #1b1b2f;font-size:30px;font-weight:600;display:flex;align-items:center;justify-content:center;color:#1b1b2f;box-sizing:border-box}
+.sq .own{position:absolute;left:0;right:0;bottom:0;height:66px;font-size:28px;font-weight:600;padding:14px 14px;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sq.corner{background:#ffd23f}
+.sq.special{background:#dff1ff}
+.sq.cur{box-shadow:inset 0 0 0 12px #ff2e88}
+.sq .big{padding:24px 14px 0;font-size:44px;font-weight:600;line-height:1.05}
+.sq .sub{padding:8px 14px 0;font-size:28px;line-height:1.15}
+.panel{position:absolute;top:420px;background:#22305a;border-radius:36px;box-sizing:border-box;padding:28px 36px;overflow:hidden}
+.panel h2{margin:0 0 10px;font-size:46px;font-weight:600;color:#ffd23f}
+.team{width:800px;height:620px}
+.team .tname{font-size:56px;font-weight:600;display:flex;align-items:center;gap:20px;white-space:nowrap;overflow:hidden}
+.team .money{font-size:110px;font-weight:600;margin:6px 0}
+.team .stat{font-size:34px;color:#cfd8ff}
+.team .chips{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+.chip{font-size:28px;font-weight:600;padding:6px 14px;border-radius:14px;color:#1b1b2f}
+.team.active{box-shadow:0 0 0 12px #ff2e88}
+.team.empty{opacity:.25}
+.badge{display:inline-flex;width:70px;height:70px;border-radius:50%;align-items:center;justify-content:center;color:#1b1b2f;font-size:44px;font-weight:600;border:5px solid #fff;flex:0 0 70px}
+.dock{position:absolute;top:880px;height:180px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:14px}
+.btn{font-family:inherit;font-size:50px;font-weight:600;border:none;border-radius:28px;padding:0 38px;height:150px;cursor:pointer;background:#ffd23f;color:#1b1b2f}
+.dock.many .btn{font-size:34px;height:82px;padding:0 24px;border-radius:20px}
+.btn.go{background:#3ddc97}.btn.no{background:#ff7b7f}.btn.alt{background:#7fd8ff}.btn.off{background:#596384;color:#c6cbe0;cursor:default}
+.btn.sm{font-size:32px;height:76px;padding:0 24px;border-radius:18px}
+#timer .btn.sm{font-size:28px;height:62px}
+.btn.sel{outline:8px solid #fff}
+#turn .who{font-size:64px;font-weight:600;display:flex;align-items:center;gap:24px}
+#dice{display:flex;gap:30px;margin:22px 0}
+.die{width:150px;height:150px;border-radius:30px;background:#fff;color:#1b1b2f;font-size:100px;font-weight:600;display:flex;align-items:center;justify-content:center}
+#msg{font-size:40px;line-height:1.2;color:#e7ecff}
+#qcard{background:#fdf6e3;color:#1b1b2f}
+#qcard .qh{font-size:34px;font-weight:600;color:#6b4e00;margin-bottom:8px}
+#qcard .qq{font-weight:600;line-height:1.15;margin-bottom:16px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.opt{background:#fff;border:5px solid #1b1b2f;border-radius:22px;padding:12px 18px;font-size:36px;cursor:pointer;line-height:1.15;display:flex;gap:14px;align-items:center}
+.opt b{flex:0 0 auto}
+.opt.right{background:#c8f7dc;border-color:#0b7a43}
+.opt.wrong{background:#ffd6d6;border-color:#a3171b}
+.exp{margin-top:14px;font-size:32px;line-height:1.2;color:#333}
+.feed div{font-size:32px;line-height:1.2;padding:8px 0;border-bottom:2px solid #33427a}
+.lb-row{display:flex;align-items:center;gap:20px;font-size:44px;padding:10px 0;border-bottom:2px solid #33427a}
+.lb-row .n{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-row .v{font-weight:600}
+.lb-row .s{font-size:30px;color:#cfd8ff;width:300px;text-align:right}
+#timer .t{font-size:110px;font-weight:600;line-height:1}
+.heat{display:grid;grid-template-columns:1fr 1fr;column-gap:30px}
+.hrow{display:flex;align-items:center;gap:10px;font-size:26px;margin:3px 0}
+.hrow span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar{flex:0 0 130px;height:14px;background:#33427a;border-radius:7px;overflow:hidden}
+.hbar i{display:block;height:100%;background:#7fd8ff}
+.hide{display:none!important}
+.setrow{font-size:40px;margin:18px 0 12px}
+#floorcv{position:absolute;left:0;top:0}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="wall" style="left:0;width:3436px"></div>
+  <div class="wall" style="left:3436px;width:2847px"></div>
+  <div class="wall" style="left:6283px;width:3436px"></div>
+  <div class="wall" style="left:9719px;width:2847px"></div>
+  <div id="floor"><canvas id="floorcv" width="2847" height="3436"></canvas></div>
+  <div id="board"></div>
+
+  <div class="panel team" id="team0" style="left:40px"></div>
+  <div class="panel team" id="team1" style="left:878px"></div>
+  <div class="panel team" id="team2" style="left:1758px"></div>
+  <div class="panel feed" id="feed" style="left:2596px;width:800px;height:620px"></div>
+
+  <div class="panel" id="turn" style="left:3476px;width:1344px;height:440px"></div>
+  <div class="dock" id="dockA" style="left:3476px;width:1344px"></div>
+  <div class="panel" id="qcard" style="left:4900px;width:1343px;height:440px"></div>
+  <div class="dock" id="dockB" style="left:4900px;width:1343px"></div>
+
+  <div class="panel" id="setupL" style="left:3476px;width:1344px;height:640px"></div>
+  <div class="panel" id="setupR" style="left:4900px;width:1343px;height:640px"></div>
+
+  <div class="panel team" id="team3" style="left:6323px"></div>
+  <div class="panel team" id="team4" style="left:7161px"></div>
+  <div class="panel team" id="team5" style="left:8041px"></div>
+  <div class="panel" id="info" style="left:8879px;width:800px;height:620px"></div>
+
+  <div class="panel" id="leader" style="left:9759px;width:1344px;height:640px"></div>
+  <div class="panel" id="timer" style="left:11183px;width:1343px;height:250px;padding:20px 30px"></div>
+  <div class="panel" id="heatp" style="left:11183px;top:690px;width:1343px;height:370px;padding:20px 30px"></div>
+</div>
+<input type="file" id="file" accept=".xlsx,.xls" class="hide">
+<script>
+const SAMPLE = {"settings": {"name": "Tycoon (name to be voted!)", "start": 1500, "go": 200, "minutes": 60}, "teams": ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"], "names": {"U1": "Science", "1A": "The Solar System", "1B": "The Human Body", "U2": "Geography", "2A": "UK Cities", "2B": "Rivers and Oceans", "2C": "World Capitals", "U3": "History", "3A": "The Tudors", "3B": "The World Wars", "3C": "Industrial Revolution", "U4": "Digital Skills", "4A": "Online Safety", "4B": "Computer Hardware", "4C": "The Internet", "U5": "Healthy Living", "5A": "Food and Nutrition", "5B": "First Aid", "5C": "Fitness", "U6": "Money Matters", "6A": "Budgeting", "6B": "Payslips", "6C": "Saving and Banking", "U7": "Environment", "7A": "Recycling", "7B": "Energy", "7C": "Climate", "U8": "Careers", "8A": "CVs", "8B": "Interviews", "HUB1": "Teamwork", "HUB2": "Communication", "HUB3": "Problem Solving", "HUB4": "Customer Service", "MATHS": "Maths", "ENGLISH": "English"}, "questions": [{"id": "s0", "topic": "1A", "level": 1, "q": "Which planet is closest to the Sun?", "opts": [{"L": "A", "text": "Venus"}, {"L": "B", "text": "Mercury"}, {"L": "C", "text": "Mars"}, {"L": "D", "text": "Earth"}], "ans": "B", "exp": "Mercury has the smallest orbit of all the planets."}, {"id": "s1", "topic": "1B", "level": 1, "q": "Which organ pumps blood around the body?", "opts": [{"L": "A", "text": "Lungs"}, {"L": "B", "text": "Liver"}, {"L": "C", "text": "Heart"}, {"L": "D", "text": "Kidneys"}], "ans": "C", "exp": "The heart pumps blood through the arteries and veins."}, {"id": "s2", "topic": "2A", "level": 1, "q": "What is the capital city of Wales?", "opts": [{"L": "A", "text": "Swansea"}, {"L": "B", "text": "Cardiff"}, {"L": "C", "text": "Newport"}, {"L": "D", "text": "Bangor"}], "ans": "B", "exp": "Cardiff has been the capital of Wales since 1955."}, {"id": "s3", "topic": "2B", "level": 1, "q": "What is the longest river in the UK?", "opts": [{"L": "A", "text": "Thames"}, {"L": "B", "text": "Severn"}, {"L": "C", "text": "Trent"}, {"L": "D", "text": "Tyne"}], "ans": "B", "exp": "The Severn runs about 220 miles from Wales into the Bristol Channel."}, {"id": "s4", "topic": "2C", "level": 1, "q": "What is the capital of Australia?", "opts": [{"L": "A", "text": "Sydney"}, {"L": "B", "text": "Melbourne"}, {"L": "C", "text": "Canberra"}, {"L": "D", "text": "Perth"}], "ans": "C", "exp": "Canberra was purpose-built as the capital."}, {"id": "s5", "topic": "3A", "level": 1, "q": "How many wives did Henry VIII have?", "opts": [{"L": "A", "text": "4"}, {"L": "B", "text": "5"}, {"L": "C", "text": "6"}, {"L": "D", "text": "8"}], "ans": "C", "exp": "Henry VIII married six times."}, {"id": "s6", "topic": "3B", "level": 1, "q": "In which year did the Second World War end?", "opts": [{"L": "A", "text": "1918"}, {"L": "B", "text": "1939"}, {"L": "C", "text": "1945"}, {"L": "D", "text": "1950"}], "ans": "C", "exp": "The war ended in 1945."}, {"id": "s7", "topic": "3C", "level": 1, "q": "Which invention powered many factories in the Industrial Revolution?", "opts": [{"L": "A", "text": "Steam engine"}, {"L": "B", "text": "Electric motor"}, {"L": "C", "text": "Petrol engine"}, {"L": "D", "text": "Solar panel"}], "ans": "A", "exp": "Steam engines drove machines in mills and factories."}, {"id": "s8", "topic": "4A", "level": 1, "q": "Which of these makes the strongest password?", "opts": [{"L": "A", "text": "Your pet's name"}, {"L": "B", "text": "A long mix of words, numbers and symbols"}, {"L": "C", "text": "Your birthday"}, {"L": "D", "text": "password123"}], "ans": "B", "exp": "Long, random combinations are much harder to guess or crack."}, {"id": "s9", "topic": "4B", "level": 1, "q": "What does CPU stand for?", "opts": [{"L": "A", "text": "Central Processing Unit"}, {"L": "B", "text": "Computer Power Unit"}, {"L": "C", "text": "Central Program Utility"}, {"L": "D", "text": "Core Processing Upload"}], "ans": "A", "exp": "The CPU carries out a computer's instructions."}, {"id": "s10", "topic": "4C", "level": 1, "q": "What does 'www' stand for in a web address?", "opts": [{"L": "A", "text": "World Wide Web"}, {"L": "B", "text": "Wide World Web"}, {"L": "C", "text": "Web World Wide"}, {"L": "D", "text": "World Web Window"}], "ans": "A", "exp": "The World Wide Web was invented by Tim Berners-Lee."}, {"id": "s11", "topic": "5A", "level": 1, "q": "How many portions of fruit and veg a day does the NHS recommend?", "opts": [{"L": "A", "text": "At least 3"}, {"L": "B", "text": "At least 5"}, {"L": "C", "text": "At least 7"}, {"L": "D", "text": "At least 10"}], "ans": "B", "exp": "The NHS '5 A Day' guidance."}, {"id": "s12", "topic": "5B", "level": 1, "q": "Which number do you call in a UK emergency?", "opts": [{"L": "A", "text": "101"}, {"L": "B", "text": "111"}, {"L": "C", "text": "999"}, {"L": "D", "text": "911"}], "ans": "C", "exp": "999 (or 112) for emergencies; 111 is non-urgent medical help, 101 is non-emergency police."}, {"id": "s13", "topic": "5C", "level": 1, "q": "How much moderate activity should adults aim for each week (NHS)?", "opts": [{"L": "A", "text": "30 minutes"}, {"L": "B", "text": "75 minutes"}, {"L": "C", "text": "150 minutes"}, {"L": "D", "text": "300 minutes"}], "ans": "C", "exp": "At least 150 minutes of moderate activity, or 75 minutes vigorous."}, {"id": "s14", "topic": "6A", "level": 1, "q": "What is a budget?", "opts": [{"L": "A", "text": "A plan for your income and spending"}, {"L": "B", "text": "A type of bank account"}, {"L": "C", "text": "A loan"}, {"L": "D", "text": "A tax"}], "ans": "A", "exp": "A budget helps you see where your money goes."}, {"id": "s15", "topic": "6B", "level": 1, "q": "On a UK payslip, what does 'NI' stand for?", "opts": [{"L": "A", "text": "National Income"}, {"L": "B", "text": "National Insurance"}, {"L": "C", "text": "Net Income"}, {"L": "D", "text": "New Investment"}], "ans": "B", "exp": "National Insurance contributions are taken from your pay."}, {"id": "s16", "topic": "6C", "level": 1, "q": "What is 'interest' on a savings account?", "opts": [{"L": "A", "text": "A fee you pay the bank"}, {"L": "B", "text": "Money the bank pays you for saving"}, {"L": "C", "text": "A type of tax"}, {"L": "D", "text": "Your account number"}], "ans": "B", "exp": "Banks pay interest as a reward for keeping your money with them."}, {"id": "s17", "topic": "7A", "level": 1, "q": "Which of these can usually go in household recycling?", "opts": [{"L": "A", "text": "Clean glass bottles"}, {"L": "B", "text": "Nappies"}, {"L": "C", "text": "Crisp packets"}, {"L": "D", "text": "Used tissues"}], "ans": "A", "exp": "Clean glass bottles and jars are widely recycled."}, {"id": "s18", "topic": "7B", "level": 1, "q": "Which of these is a renewable energy source?", "opts": [{"L": "A", "text": "Coal"}, {"L": "B", "text": "Wind"}, {"L": "C", "text": "Natural gas"}, {"L": "D", "text": "Oil"}], "ans": "B", "exp": "Wind won't run out, unlike fossil fuels."}, {"id": "s19", "topic": "7C", "level": 1, "q": "Which gas contributes most to human-caused climate change?", "opts": [{"L": "A", "text": "Oxygen"}, {"L": "B", "text": "Nitrogen"}, {"L": "C", "text": "Carbon dioxide"}, {"L": "D", "text": "Helium"}], "ans": "C", "exp": "Burning fossil fuels releases carbon dioxide."}, {"id": "s20", "topic": "8A", "level": 1, "q": "What should a CV include?", "opts": [{"L": "A", "text": "Your bank details"}, {"L": "B", "text": "Your skills and experience"}, {"L": "C", "text": "Your passwords"}, {"L": "D", "text": "Your favourite film"}], "ans": "B", "exp": "A CV shows employers what you can offer."}, {"id": "s21", "topic": "8B", "level": 1, "q": "What's a good thing to do at the end of an interview?", "opts": [{"L": "A", "text": "Ask a question about the role"}, {"L": "B", "text": "Check your phone"}, {"L": "C", "text": "Ask when you can book a holiday"}, {"L": "D", "text": "Say nothing"}], "ans": "A", "exp": "Asking a question shows genuine interest."}, {"id": "s22", "topic": "U1", "level": 2, "q": "Which gas do plants take in for photosynthesis?", "opts": [{"L": "A", "text": "Oxygen"}, {"L": "B", "text": "Carbon dioxide"}, {"L": "C", "text": "Nitrogen"}, {"L": "D", "text": "Hydrogen"}], "ans": "B", "exp": "Plants use carbon dioxide, water and light to make glucose."}, {"id": "s23", "topic": "U1", "level": 2, "q": "Which blood cells help fight infection?", "opts": [{"L": "A", "text": "Red blood cells"}, {"L": "B", "text": "White blood cells"}, {"L": "C", "text": "Platelets"}, {"L": "D", "text": "Plasma"}], "ans": "B", "exp": "White blood cells are part of the immune system."}, {"id": "s24", "topic": "U1", "level": 3, "q": "Why does Earth have seasons?", "opts": [{"L": "A", "text": "Its distance from the Sun changes"}, {"L": "B", "text": "Its axis is tilted"}, {"L": "C", "text": "The Moon's gravity"}, {"L": "D", "text": "The Sun gets hotter in summer"}], "ans": "B", "exp": "The tilt changes how directly sunlight hits each half of the planet."}, {"id": "s25", "topic": "U2", "level": 2, "q": "Which is the largest ocean?", "opts": [{"L": "A", "text": "Atlantic"}, {"L": "B", "text": "Indian"}, {"L": "C", "text": "Pacific"}, {"L": "D", "text": "Arctic"}], "ans": "C", "exp": "The Pacific covers about a third of Earth's surface."}, {"id": "s26", "topic": "U2", "level": 2, "q": "What is the highest mountain in the UK?", "opts": [{"L": "A", "text": "Yr Wyddfa (Snowdon)"}, {"L": "B", "text": "Ben Nevis"}, {"L": "C", "text": "Scafell Pike"}, {"L": "D", "text": "Slieve Donard"}], "ans": "B", "exp": "Ben Nevis in Scotland is 1,345 m high."}, {"id": "s27", "topic": "U2", "level": 3, "q": "Why were many cities built next to rivers?", "opts": [{"L": "A", "text": "Rivers are quieter"}, {"L": "B", "text": "For water, trade and transport"}, {"L": "C", "text": "Rivers stop flooding"}, {"L": "D", "text": "It was the law"}], "ans": "B", "exp": "Rivers supplied water and were the main trade routes."}, {"id": "s28", "topic": "U3", "level": 2, "q": "Who was the last Tudor monarch?", "opts": [{"L": "A", "text": "Henry VIII"}, {"L": "B", "text": "Edward VI"}, {"L": "C", "text": "Mary I"}, {"L": "D", "text": "Elizabeth I"}], "ans": "D", "exp": "Elizabeth I died in 1603, ending the Tudor line."}, {"id": "s29", "topic": "U3", "level": 2, "q": "In which year did the First World War begin?", "opts": [{"L": "A", "text": "1905"}, {"L": "B", "text": "1914"}, {"L": "C", "text": "1918"}, {"L": "D", "text": "1939"}], "ans": "B", "exp": "The war began in 1914."}, {"id": "s30", "topic": "U3", "level": 3, "q": "Why did many people move to towns during the Industrial Revolution?", "opts": [{"L": "A", "text": "To find work in factories"}, {"L": "B", "text": "Farming was banned"}, {"L": "C", "text": "Towns were cleaner"}, {"L": "D", "text": "To avoid tax"}], "ans": "A", "exp": "New factories created jobs while farm work declined."}, {"id": "s31", "topic": "U4", "level": 2, "q": "What is phishing?", "opts": [{"L": "A", "text": "A fake message trying to trick you into giving information"}, {"L": "B", "text": "A type of computer fan"}, {"L": "C", "text": "A fast internet connection"}, {"L": "D", "text": "A way to back up files"}], "ans": "A", "exp": "Phishing messages pretend to be trusted organisations."}, {"id": "s32", "topic": "U4", "level": 2, "q": "Which of these is an input device?", "opts": [{"L": "A", "text": "Monitor"}, {"L": "B", "text": "Printer"}, {"L": "C", "text": "Keyboard"}, {"L": "D", "text": "Speaker"}], "ans": "C", "exp": "Input devices send data into the computer."}, {"id": "s33", "topic": "U4", "level": 3, "q": "Why should you install software updates?", "opts": [{"L": "A", "text": "They make the screen brighter"}, {"L": "B", "text": "They fix security weaknesses"}, {"L": "C", "text": "They delete old files"}, {"L": "D", "text": "They slow down hackers' internet"}], "ans": "B", "exp": "Updates patch known vulnerabilities."}, {"id": "s34", "topic": "U5", "level": 2, "q": "What does CPR stand for?", "opts": [{"L": "A", "text": "Cardiopulmonary resuscitation"}, {"L": "B", "text": "Central pulse recovery"}, {"L": "C", "text": "Chest pressure routine"}, {"L": "D", "text": "Cardiac pressure relief"}], "ans": "A", "exp": "CPR keeps blood and oxygen moving until help arrives."}, {"id": "s35", "topic": "U5", "level": 2, "q": "Which nutrient is the body's main source of energy?", "opts": [{"L": "A", "text": "Carbohydrates"}, {"L": "B", "text": "Vitamins"}, {"L": "C", "text": "Minerals"}, {"L": "D", "text": "Fibre"}], "ans": "A", "exp": "Carbohydrates are broken down into glucose for energy."}, {"id": "s36", "topic": "U5", "level": 3, "q": "Why is warming up before exercise important?", "opts": [{"L": "A", "text": "It burns more calories"}, {"L": "B", "text": "It prepares muscles and reduces injury risk"}, {"L": "C", "text": "It makes you taller"}, {"L": "D", "text": "It isn't important"}], "ans": "B", "exp": "Warm muscles are more flexible and less likely to strain."}, {"id": "s37", "topic": "U6", "level": 2, "q": "What is the difference between gross and net pay?", "opts": [{"L": "A", "text": "Gross is after deductions"}, {"L": "B", "text": "Net is after deductions"}, {"L": "C", "text": "They're the same"}, {"L": "D", "text": "Net includes bonuses"}], "ans": "B", "exp": "Net pay is what actually reaches your bank account."}, {"id": "s38", "topic": "U6", "level": 2, "q": "What does APR show you?", "opts": [{"L": "A", "text": "The yearly cost of borrowing"}, {"L": "B", "text": "Your account number"}, {"L": "C", "text": "Your credit score"}, {"L": "D", "text": "Your monthly salary"}], "ans": "A", "exp": "APR helps you compare loans and credit cards."}, {"id": "s39", "topic": "U6", "level": 3, "q": "Why is an emergency fund useful?", "opts": [{"L": "A", "text": "It covers unexpected costs without borrowing"}, {"L": "B", "text": "It earns the highest interest"}, {"L": "C", "text": "It improves your payslip"}, {"L": "D", "text": "It replaces insurance"}], "ans": "A", "exp": "Savings for emergencies stop surprise bills becoming debt."}, {"id": "s40", "topic": "U7", "level": 2, "q": "What does 'carbon footprint' mean?", "opts": [{"L": "A", "text": "Total greenhouse gases caused by a person or activity"}, {"L": "B", "text": "The size of your shoes"}, {"L": "C", "text": "The amount of coal in the UK"}, {"L": "D", "text": "A type of tree"}], "ans": "A", "exp": "It measures the climate impact of what we do."}, {"id": "s41", "topic": "U7", "level": 2, "q": "Which light bulb uses the least energy?", "opts": [{"L": "A", "text": "Incandescent"}, {"L": "B", "text": "Halogen"}, {"L": "C", "text": "LED"}, {"L": "D", "text": "Candle"}], "ans": "C", "exp": "LEDs use a fraction of the energy of older bulbs."}, {"id": "s42", "topic": "U7", "level": 3, "q": "Why does reducing food waste help the environment?", "opts": [{"L": "A", "text": "It saves the energy, water and emissions used to produce food"}, {"L": "B", "text": "Food waste is radioactive"}, {"L": "C", "text": "It makes bins lighter"}, {"L": "D", "text": "It doesn't help"}], "ans": "A", "exp": "Wasted food wastes everything that went into growing and transporting it."}, {"id": "s43", "topic": "U8", "level": 2, "q": "What is a cover letter for?", "opts": [{"L": "A", "text": "Explaining why you're right for a specific job"}, {"L": "B", "text": "Listing your hobbies only"}, {"L": "C", "text": "Asking for a pay rise"}, {"L": "D", "text": "Replacing your CV"}], "ans": "A", "exp": "A cover letter tailors your application to the role."}, {"id": "s44", "topic": "U8", "level": 2, "q": "What does the STAR method help you do in an interview?", "opts": [{"L": "A", "text": "Answer with Situation, Task, Action, Result"}, {"L": "B", "text": "Rate the interviewer"}, {"L": "C", "text": "Remember names"}, {"L": "D", "text": "Choose an outfit"}], "ans": "A", "exp": "STAR gives structure to examples of your skills."}, {"id": "s45", "topic": "U8", "level": 3, "q": "Why should you research a company before an interview?", "opts": [{"L": "A", "text": "To show interest and tailor your answers"}, {"L": "B", "text": "To find the manager's address"}, {"L": "C", "text": "It isn't necessary"}, {"L": "D", "text": "To ask for a higher salary"}], "ans": "A", "exp": "Research helps you link your skills to what they need."}, {"id": "s46", "topic": "HUB1", "level": 1, "q": "A team member is struggling to finish their part. What's the best response?", "opts": [{"L": "A", "text": "Ignore it"}, {"L": "B", "text": "Offer help or flag it early"}, {"L": "C", "text": "Redo their work without telling them"}, {"L": "D", "text": "Complain to others"}], "ans": "B", "exp": "Good teams support each other and raise problems early."}, {"id": "s47", "topic": "HUB2", "level": 1, "q": "Which is an example of active listening?", "opts": [{"L": "A", "text": "Interrupting with your own story"}, {"L": "B", "text": "Nodding and summarising what they said"}, {"L": "C", "text": "Looking at your phone"}, {"L": "D", "text": "Planning your reply while they talk"}], "ans": "B", "exp": "Summarising shows you've understood."}, {"id": "s48", "topic": "HUB3", "level": 1, "q": "What's the first step in solving a problem?", "opts": [{"L": "A", "text": "Pick the quickest fix"}, {"L": "B", "text": "Understand the problem clearly"}, {"L": "C", "text": "Find someone to blame"}, {"L": "D", "text": "Give up"}], "ans": "B", "exp": "You can't fix what you don't understand."}, {"id": "s49", "topic": "HUB4", "level": 1, "q": "A customer is angry about a late order. What should you do first?", "opts": [{"L": "A", "text": "Argue back"}, {"L": "B", "text": "Listen and acknowledge their frustration"}, {"L": "C", "text": "Hang up"}, {"L": "D", "text": "Blame the courier"}], "ans": "B", "exp": "Listening calms the situation before you solve it."}, {"id": "s50", "topic": "MATHS", "level": 1, "q": "What is 15% of £80?", "opts": [{"L": "A", "text": "£8"}, {"L": "B", "text": "£12"}, {"L": "C", "text": "£15"}, {"L": "D", "text": "£10"}], "ans": "B", "exp": "10% is £8, 5% is £4, so 15% is £12."}, {"id": "s51", "topic": "MATHS", "level": 1, "q": "A train leaves at 14:45. The journey takes 1 hour 50 minutes. When does it arrive?", "opts": [{"L": "A", "text": "16:25"}, {"L": "B", "text": "16:35"}, {"L": "C", "text": "16:45"}, {"L": "D", "text": "15:35"}], "ans": "B", "exp": "14:45 + 1 h = 15:45, + 50 min = 16:35."}, {"id": "s52", "topic": "MATHS", "level": 1, "q": "What is 3/4 as a percentage?", "opts": [{"L": "A", "text": "34%"}, {"L": "B", "text": "60%"}, {"L": "C", "text": "75%"}, {"L": "D", "text": "80%"}], "ans": "C", "exp": "3 ÷ 4 = 0.75 = 75%."}, {"id": "s53", "topic": "MATHS", "level": 1, "q": "A room is 6 m by 4 m. What is its area?", "opts": [{"L": "A", "text": "10 m²"}, {"L": "B", "text": "20 m²"}, {"L": "C", "text": "24 m²"}, {"L": "D", "text": "48 m²"}], "ans": "C", "exp": "Area = length × width = 24 m²."}, {"id": "s54", "topic": "ENGLISH", "level": 1, "q": "Which word is spelled correctly?", "opts": [{"L": "A", "text": "Recieve"}, {"L": "B", "text": "Receive"}, {"L": "C", "text": "Receeve"}, {"L": "D", "text": "Riceive"}], "ans": "B", "exp": "'I before e except after c'."}, {"id": "s55", "topic": "ENGLISH", "level": 1, "q": "Fill the gap: '___ going to be late.'", "opts": [{"L": "A", "text": "Their"}, {"L": "B", "text": "There"}, {"L": "C", "text": "They're"}, {"L": "D", "text": "Thier"}], "ans": "C", "exp": "They're = they are."}, {"id": "s56", "topic": "ENGLISH", "level": 1, "q": "Which is the best greeting for a formal email to someone you don't know?", "opts": [{"L": "A", "text": "Hiya"}, {"L": "B", "text": "Dear Sir or Madam"}, {"L": "C", "text": "Yo"}, {"L": "D", "text": "Alright?"}], "ans": "B", "exp": "Formal emails need a formal greeting."}, {"id": "s57", "topic": "ENGLISH", "level": 1, "q": "Which punctuation mark ends a question?", "opts": [{"L": "A", "text": "Full stop"}, {"L": "B", "text": "Exclamation mark"}, {"L": "C", "text": "Question mark"}, {"L": "D", "text": "Comma"}], "ans": "C", "exp": "Questions end with a question mark."}, {"id": "s58", "topic": "POPQUIZ", "level": 1, "q": "True or false: the Great Wall of China is easily visible from the Moon.", "opts": [{"L": "A", "text": "True"}, {"L": "B", "text": "False"}], "ans": "B", "exp": "It's far too narrow to see from the Moon."}, {"id": "s59", "topic": "POPQUIZ", "level": 1, "q": "True or false: lightning can strike the same place twice.", "opts": [{"L": "A", "text": "True"}, {"L": "B", "text": "False"}], "ans": "A", "exp": "Tall buildings are struck many times a year."}, {"id": "s60", "topic": "POPQUIZ", "level": 1, "q": "True or false: bats are blind.", "opts": [{"L": "A", "text": "True"}, {"L": "B", "text": "False"}], "ans": "B", "exp": "Bats can see; many also use echolocation."}, {"id": "s61", "topic": "POPQUIZ", "level": 1, "q": "True or false: botanically, a tomato is a fruit.", "opts": [{"L": "A", "text": "True"}, {"L": "B", "text": "False"}], "ans": "A", "exp": "It develops from the flower and contains seeds."}, {"id": "s62", "topic": "POPQUIZ", "level": 1, "q": "True or false: goldfish only have a three-second memory.", "opts": [{"L": "A", "text": "True"}, {"L": "B", "text": "False"}], "ans": "B", "exp": "Studies show goldfish can remember things for months."}, {"id": "s63", "topic": "REALWORLD", "level": 1, "q": "You're running 10 minutes late for work. What should you do?", "opts": [{"L": "A", "text": "Say nothing"}, {"L": "B", "text": "Let your manager know as soon as possible"}, {"L": "C", "text": "Go home"}, {"L": "D", "text": "Post about it online"}], "ans": "B", "exp": "Telling your manager early shows reliability."}, {"id": "s64", "topic": "REALWORLD", "level": 1, "q": "A colleague offers you their login to 'save time'. What should you do?", "opts": [{"L": "A", "text": "Use it"}, {"L": "B", "text": "Politely refuse and use your own login"}, {"L": "C", "text": "Share it with others"}, {"L": "D", "text": "Write it on a sticky note"}], "ans": "B", "exp": "Sharing logins breaks security policies."}, {"id": "s65", "topic": "REALWORLD", "level": 1, "q": "You make a mistake that affects a customer. What's the best approach?", "opts": [{"L": "A", "text": "Hide it"}, {"L": "B", "text": "Own it, apologise and fix it"}, {"L": "C", "text": "Blame a colleague"}, {"L": "D", "text": "Wait to see if they notice"}], "ans": "B", "exp": "Owning mistakes builds trust."}, {"id": "s66", "topic": "REALWORLD", "level": 1, "q": "An email from 'IT' urgently asks for your password. What do you do?", "opts": [{"L": "A", "text": "Reply with it"}, {"L": "B", "text": "Report it as phishing"}, {"L": "C", "text": "Forward it to friends"}, {"L": "D", "text": "Ignore all IT emails forever"}], "ans": "B", "exp": "Real IT teams never ask for your password."}, {"id": "s67", "topic": "REALWORLD", "level": 1, "q": "Your manager gives feedback you disagree with. Best response?", "opts": [{"L": "A", "text": "Walk out"}, {"L": "B", "text": "Listen, ask questions and discuss calmly"}, {"L": "C", "text": "Ignore it"}, {"L": "D", "text": "Complain online"}], "ans": "B", "exp": "Calm discussion helps you understand and improve."}, {"id": "s68", "topic": "REVISION", "level": 1, "q": "What is 7 × 8?", "opts": [{"L": "A", "text": "54"}, {"L": "B", "text": "56"}, {"L": "C", "text": "64"}, {"L": "D", "text": "48"}], "ans": "B", "exp": "7 × 8 = 56."}, {"id": "s69", "topic": "REVISION", "level": 1, "q": "What is the capital of Scotland?", "opts": [{"L": "A", "text": "Glasgow"}, {"L": "B", "text": "Edinburgh"}, {"L": "C", "text": "Aberdeen"}, {"L": "D", "text": "Dundee"}], "ans": "B", "exp": "Edinburgh is Scotland's capital."}, {"id": "s70", "topic": "REVISION", "level": 1, "q": "How many minutes are in 2.5 hours?", "opts": [{"L": "A", "text": "120"}, {"L": "B", "text": "130"}, {"L": "C", "text": "150"}, {"L": "D", "text": "250"}], "ans": "C", "exp": "2 × 60 + 30 = 150."}, {"id": "s71", "topic": "REVISION", "level": 1, "q": "What is the plural of 'child'?", "opts": [{"L": "A", "text": "Childs"}, {"L": "B", "text": "Children"}, {"L": "C", "text": "Childes"}, {"L": "D", "text": "Childrens"}], "ans": "B", "exp": "'Children' is an irregular plural."}, {"id": "s72", "topic": "BONUS", "level": 1, "q": "What is the largest planet in the Solar System?", "opts": [{"L": "A", "text": "Saturn"}, {"L": "B", "text": "Jupiter"}, {"L": "C", "text": "Neptune"}, {"L": "D", "text": "Earth"}], "ans": "B", "exp": "Jupiter is more than twice as massive as all the other planets combined."}, {"id": "s73", "topic": "BONUS", "level": 1, "q": "How many sides does a hexagon have?", "opts": [{"L": "A", "text": "5"}, {"L": "B", "text": "6"}, {"L": "C", "text": "7"}, {"L": "D", "text": "8"}], "ans": "B", "exp": "Hex means six."}, {"id": "s74", "topic": "BONUS", "level": 1, "q": "Which city hosted the 2012 Olympic Games?", "opts": [{"L": "A", "text": "Beijing"}, {"L": "B", "text": "London"}, {"L": "C", "text": "Rio de Janeiro"}, {"L": "D", "text": "Athens"}], "ans": "B", "exp": "London hosted the 2012 Summer Olympics."}, {"id": "s75", "topic": "BONUS", "level": 1, "q": "What is H2O more commonly called?", "opts": [{"L": "A", "text": "Water"}, {"L": "B", "text": "Salt"}, {"L": "C", "text": "Hydrogen peroxide"}, {"L": "D", "text": "Oxygen"}], "ans": "A", "exp": "Two hydrogen atoms and one oxygen atom make water."}]};
+
+const WALLS=[{x:0,w:3436},{x:3436,w:2847},{x:6283,w:3436},{x:9719,w:2847}];
+const UNITCOL=['','#C0703A','#4FC3F7','#F48FB1','#FFA726','#EF5350','#FFEE58','#66BB6A','#5C6BC0'];
+const UNITTXT=['','#fff','#0b2533','#3a0d1f','#2b1600','#fff','#2b2600','#0d230e','#fff'];
+const TEAMCOL=['#FF6B6B','#4FC3F7','#FFD740','#69F0AE','#E585FF','#FFA94D'];
+const BOARD=[
+ {t:'go'},{t:'prop',u:1,c:'1A'},{t:'real'},{t:'prop',u:1,c:'1B'},{t:'tax',amt:100},{t:'hub',c:'HUB1'},{t:'prop',u:2,c:'2A'},{t:'pop'},{t:'prop',u:2,c:'2B'},{t:'prop',u:2,c:'2C'},
+ {t:'jail'},{t:'prop',u:3,c:'3A'},{t:'util',c:'MATHS'},{t:'prop',u:3,c:'3B'},{t:'prop',u:3,c:'3C'},{t:'hub',c:'HUB2'},{t:'prop',u:4,c:'4A'},{t:'real'},{t:'prop',u:4,c:'4B'},{t:'prop',u:4,c:'4C'},
+ {t:'bonus'},{t:'prop',u:5,c:'5A'},{t:'pop'},{t:'prop',u:5,c:'5B'},{t:'prop',u:5,c:'5C'},{t:'hub',c:'HUB3'},{t:'prop',u:6,c:'6A'},{t:'prop',u:6,c:'6B'},{t:'util',c:'ENGLISH'},{t:'prop',u:6,c:'6C'},
+ {t:'gojail'},{t:'prop',u:7,c:'7A'},{t:'prop',u:7,c:'7B'},{t:'real'},{t:'prop',u:7,c:'7C'},{t:'hub',c:'HUB4'},{t:'pop'},{t:'prop',u:8,c:'8A'},{t:'tax',amt:200},{t:'prop',u:8,c:'8B'}];
+const R={a:[2,10,30,90,160,250],b:[4,20,60,180,320,450],c:[6,30,90,270,400,550],d:[8,40,100,300,450,600],e:[10,50,150,450,625,750],f:[12,60,180,500,700,900],g:[14,70,200,550,750,950],h:[16,80,220,600,800,1000],i:[18,90,250,700,875,1050],j:[20,100,300,750,925,1100],k:[22,110,330,800,975,1150],l:[24,120,360,850,1025,1200],m:[26,130,390,900,1100,1275],n:[28,150,450,1000,1200,1400],o:[35,175,500,1100,1300,1500],p:[50,200,600,1400,1700,2000]};
+const PR={'1A':[60,R.a],'1B':[60,R.b],'2A':[100,R.c],'2B':[100,R.c],'2C':[120,R.d],'3A':[140,R.e],'3B':[140,R.e],'3C':[160,R.f],'4A':[180,R.g],'4B':[180,R.g],'4C':[200,R.h],'5A':[220,R.i],'5B':[220,R.i],'5C':[240,R.j],'6A':[260,R.k],'6B':[260,R.k],'6C':[280,R.l],'7A':[300,R.m],'7B':[300,R.m],'7C':[320,R.n],'8A':[350,R.o],'8B':[400,R.p]};
+const HOUSE={1:50,2:50,3:100,4:100,5:150,6:150,7:200,8:200};
+const KIND_TOPIC={pop:'POPQUIZ',real:'REALWORLD',jail:'REVISION',bonus:'BONUS'};
+
+let BANK=JSON.parse(JSON.stringify(SAMPLE));
+let BANKSRC='Built-in sample questions';
+let S={phase:'setup',nTeams:4,minutes:BANK.settings.minutes||60,teams:[],cur:0,own:{},pot:0,dice:[1,1],msg:'',feed:[],log:[],used:new Set(),timeLeft:0,running:false,timeUp:false,q:null,kind:null,ctx:null,actA:[],actB:[],landed:null,busy:false};
+
+const $=id=>document.getElementById(id);
+const rnd=n=>Math.floor(Math.random()*n);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nm=c=>BANK.names[c]||c;
+const money=v=>'£'+Math.round(v).toLocaleString('en-GB');
+
+function sqGeom(i){const w=WALLS[Math.floor(i/10)],k=i%10,sw=w.w/10;return {left:w.x+k*sw,width:sw}}
+function label(i){const b=BOARD[i];if(b.t==='prop')return nm(b.c);if(b.t==='hub')return nm(b.c);if(b.t==='util')return nm(b.c);return ''}
+function longLabel(i){const b=BOARD[i];if(b.t==='prop')return `Unit ${b.u} (${nm('U'+b.u)}): ${nm(b.c)}`;if(b.t==='hub')return `Skills hub: ${nm(b.c)}`;if(b.t==='util')return nm(b.c);return ''}
+function price(i){const b=BOARD[i];return b.t==='prop'?PR[b.c][0]:b.t==='hub'?200:b.t==='util'?150:0}
+function unitSquares(u){return BOARD.map((b,i)=>b.u===u?i:-1).filter(i=>i>=0)}
+function ownsSet(team,u){return unitSquares(u).every(i=>S.own[i]&&S.own[i].team===team)}
+function rent(i){const o=S.own[i],b=BOARD[i];
+  if(b.t==='prop'){const r=PR[b.c][1];return o.houses?r[o.houses]:(ownsSet(o.team,b.u)?r[0]*2:r[0])}
+  if(b.t==='hub'){const n=BOARD.filter((x,j)=>x.t==='hub'&&S.own[j]&&S.own[j].team===o.team).length;return [25,50,100,200][n-1]}
+  const both=BOARD.every((x,j)=>x.t!=='util'||(S.own[j]&&S.own[j].team===o.team));return (S.dice[0]+S.dice[1])*(both?10:4)}
+function catOf(i){const b=BOARD[i];return b.t==='prop'?'U'+b.u:b.t==='hub'?'HUB':b.c}
+const CATS=['U1','U2','U3','U4','U5','U6','U7','U8','HUB','MATHS','ENGLISH','POP','REAL','BONUS'];
+function catName(c){return c[0]==='U'&&c.length===2?`U${c[1]} ${nm(c)}`:{HUB:'Skills hubs',MATHS:'Maths',ENGLISH:'English',POP:'Pop quiz',REAL:'Real world',BONUS:'Bonus round'}[c]}
+
+/* ---------- questions ---------- */
+function pickQ(chain){
+  for(const [topic,lvl] of chain){
+    const pool=BANK.questions.filter(q=>q.topic===topic&&(lvl==null||q.level===lvl));
+    if(!pool.length)continue;
+    let fresh=pool.filter(q=>!S.used.has(q.id));
+    if(!fresh.length){pool.forEach(q=>S.used.delete(q.id));fresh=pool}
+    const q=fresh[rnd(fresh.length)];S.used.add(q.id);return q}
+  return null}
+function chainFor(i,lvl){const b=BOARD[i];
+  if(b.t==='prop')return [[b.c,lvl],['U'+b.u,lvl],[b.c,null],['U'+b.u,null],['ANY',null]];
+  if(b.t==='hub')return [[b.c,null],['HUB',null],['ANY',null]];
+  return [[b.c,null],['ANY',null]]}
+function teachBack(i){return {id:'teach'+i,q:`Teach it back! In 60 seconds, explain "${nm(BOARD[i].c)}" to the rest of the room.`,opts:[],ans:'',exp:'Tutor decides: was it clear and accurate? Other teams can help judge.'}}
+
+/* ---------- game flow ---------- */
+const act=(label,fn,cls='')=>({label,fn,cls});
+function team(){return S.teams[S.cur]}
+function setActs(a,b){S.actA=a||[];S.actB=b||[]}
+function feed(t){S.feed.unshift(t);S.feed=S.feed.slice(0,12)}
+
+function startGame(){
+  S.teams=[];for(let k=0;k<S.nTeams;k++)S.teams.push({name:BANK.teams[k]||`Team ${k+1}`,color:TEAMCOL[k],money:BANK.settings.start||1500,pos:0,jail:false,jailTurns:0,ok:0,att:0});
+  S.cur=0;S.own={};S.pot=0;S.feed=[];S.log=[];S.used=new Set();S.timeLeft=S.minutes*60;S.running=true;S.timeUp=false;S.phase='play';
+  feed(`Game started: ${S.nTeams} teams, ${S.minutes} minutes. Good luck!`);
+  buildBoard();startTurn()}
+
+function startTurn(){
+  S.q=null;S.kind=null;S.phase='play';const t=team();
+  if(t.jail){S.msg=`${t.name} is in the Revision Room. Answer correctly to get out.`;setActs([act('Revision question',()=>ask('jail',{}),'alt')],[])}
+  else{S.msg=`${t.name}, roll the dice!`;setActs([act('Roll dice',roll,'go')].concat(canBuild(S.cur)?[act('Build house',chooseBuild,'alt')]:[]),[])}
+  render()}
+
+function roll(){
+  if(S.busy)return;S.busy=true;setActs([],[]);render();
+  const d=[1+rnd(6),1+rnd(6)];let n=0;
+  const spin=setInterval(()=>{S.dice=[1+rnd(6),1+rnd(6)];renderTurn();
+    if(++n>9){clearInterval(spin);S.dice=d;S.msg=`${team().name} rolled ${d[0]+d[1]}`;renderTurn();setTimeout(()=>move(d[0]+d[1]),300)}},80)}
+
+function move(steps){const t=team();
+  const step=()=>{t.pos=(t.pos+1)%40;
+    if(t.pos===0){const g=BANK.settings.go||200;t.money+=g;feed(`${t.name} passed GO: +${money(g)}`);burst(t.color)}
+    renderBoardDyn();renderTeams();
+    if(--steps>0)setTimeout(step,230);else{S.busy=false;land()}};
+  step()}
+
+function land(){const t=team(),i=t.pos,b=BOARD[i];S.landed=i;
+  if(['prop','hub','util'].includes(b.t)){const o=S.own[i];
+    if(!o){const p=price(i);S.msg=`${label(i)} is for sale at ${money(p)}. Answer correctly to buy it.`;
+      setActs([t.money>=p?act(`Buy (${money(p)})`,()=>ask('buy',{i}),'go'):act(`Can't afford ${money(p)}`,()=>{},'off'),act('Pass',endTurn,'no')],[])}
+    else if(o.team===S.cur){S.msg=`${t.name} owns ${label(i)}. Safe!`;endActs()}
+    else{const r=rent(i),ow=S.teams[o.team];S.msg=`${label(i)} belongs to ${ow.name}. Rent is ${money(r)}. Pay, or challenge: right = pay nothing, wrong = pay double.`;
+      setActs([act(`Pay rent (${money(r)})`,()=>{pay(S.cur,r,o.team);feed(`${t.name} paid ${money(r)} rent to ${ow.name}`);S.msg=`Paid ${money(r)} to ${ow.name}.`;endActs();render()},'alt'),act('Challenge',()=>ask('challenge',{i,r,to:o.team}),'go')],[])}}
+  else if(b.t==='pop'||b.t==='real'||b.t==='bonus'){ask(b.t,{i});return}
+  else if(b.t==='tax'){pay(S.cur,b.amt,'pot');S.msg=`Late submission fee! ${money(b.amt)} goes into the Bonus Round pot.`;feed(`${t.name} paid a ${money(b.amt)} late fee`);endActs()}
+  else if(b.t==='gojail'){toJail(S.cur);S.msg=`${t.name} goes straight to the Revision Room!`;feed(S.msg);endActs()}
+  else{S.msg=b.t==='go'?`${t.name} landed on GO.`:`${t.name} is just visiting the Revision Room.`;endActs()}
+  render()}
+
+function endActs(){setActs([act('End turn',endTurn)].concat(canBuild(S.cur)?[act('Build house',chooseBuild,'alt')]:[]),[])}
+
+function pay(f,amt,to){const t=S.teams[f],paid=Math.min(amt,t.money);t.money-=paid;
+  if(to==='pot')S.pot+=paid;else if(typeof to==='number')S.teams[to].money+=paid;
+  if(paid<amt){feed(`${t.name} ran out of money! Off to the Revision Room to earn their way back.`);toJail(f)}}
+function toJail(f){const t=S.teams[f];t.jail=true;t.jailTurns=0;t.pos=10;renderBoardDyn()}
+
+function canBuild(k){const t=S.teams[k];if(!t||t.jail)return false;return buildable(k).length>0}
+function buildable(k){const t=S.teams[k],out=[];
+  for(let u=1;u<=8;u++){if(!ownsSet(k,u)||t.money<HOUSE[u])continue;unitSquares(u).forEach(i=>{if(S.own[i].houses<5)out.push(i)})}
+  return out}
+function chooseBuild(){const prev=S.actA;S.msg=`${team().name}: pick a property to build on. Each house means a harder question.`;
+  setActs(buildable(S.cur).map(i=>act(`${label(i)} (${S.own[i].houses===4?'hotel':'house '+(S.own[i].houses+1)})`,()=>ask('house',{i}),'go')).concat([act('Cancel',()=>{setActs(prev,[]);render()},'no')]),[]);render()}
+
+function ask(kind,ctx){S.kind=kind;S.ctx=ctx;let q=null;
+  if(kind==='buy'||kind==='challenge')q=pickQ(chainFor(ctx.i,1));
+  else if(kind==='house'){const h=S.own[ctx.i].houses;q=h>=4?teachBack(ctx.i):pickQ(chainFor(ctx.i,h<2?2:3))}
+  else q=pickQ([[KIND_TOPIC[kind],null],['ANY',null]]);
+  S.q=q||{id:'none',q:'No question found for this topic. Tutor: ask one out loud!',opts:[],ans:'',exp:''};
+  S.revealed=false;S.chosen=null;S.phase='question';
+  const titles={buy:`Buy ${label(ctx.i)}?`,challenge:`Rent challenge: ${label(ctx.i)}`,house:`Build on ${label(ctx.i)}`,pop:'Pop quiz! Correct = +£100',real:'Real world! Correct = +£150, wrong = −£75',jail:'Revision Room: answer to escape',bonus:`Bonus round! Open to everyone. Pot: ${money(S.pot+100)}`};
+  S.qtitle=titles[kind];
+  let b=[];
+  if(kind==='bonus'){b=S.teams.map((tm,k)=>act(`${tm.name} wins`,()=>awardBonus(k),'go')).concat([act('No winner',()=>awardBonus(-1),'no')])}
+  else{b=[act('✓ Correct',()=>judge(true),'go'),act('✗ Wrong',()=>judge(false),'no')];if(['buy','challenge','house'].includes(kind))b.push(act('Chicken out',chicken,'alt'))}
+  if(!S.q.opts.length&&S.q.ans)b.unshift(act('Show answer',()=>{S.revealed=true;renderQ()},'alt'));
+  S.msg=kind==='bonus'?'Every team can answer! Tutor picks who got it right first.':`${team().name}: answer the question on the front wall.`;
+  setActs([],b);render()}
+
+function chooseOpt(L){if(S.phase!=='question')return;S.chosen=L;
+  if(S.kind==='bonus'){S.revealed=true;renderQ();return}
+  judge(L===S.q.ans)}
+
+function logAns(teamIdx,ok){const k=S.kind,c=S.ctx;const cat=['buy','challenge','house'].includes(k)?catOf(c.i):{pop:'POP',real:'REAL',bonus:'BONUS',jail:'REV'}[k];
+  const t=S.teams[teamIdx];t.att++;if(ok)t.ok++;
+  S.log.push({time:new Date().toLocaleTimeString('en-GB'),team:t.name,category:catName(cat)||'Revision',topic:c&&c.i!=null?longLabel(c.i):'',type:k,question:S.q.q,correct:ok?'Yes':'No',cat})}
+
+function judge(ok){if(S.phase!=='question')return;const t=team(),k=S.kind,c=S.ctx;S.revealed=true;S.phase='result';logAns(S.cur,ok);let res='';
+  if(k==='buy'){const p=price(c.i);if(ok){pay(S.cur,p,'bank');S.own[c.i]={team:S.cur,houses:0};res=`Correct! ${t.name} buys ${label(c.i)} for ${money(p)}.`;burst(t.color)}
+    else{const pen=Math.round(p/2);pay(S.cur,pen,'pot');res=`Not quite. ${t.name} pays a ${money(pen)} penalty into the Bonus pot.`}}
+  else if(k==='house'){const hc=HOUSE[BOARD[c.i].u];if(ok){pay(S.cur,hc,'bank');S.own[c.i].houses++;res=`Correct! ${S.own[c.i].houses===5?'Hotel':'House'} built on ${label(c.i)} for ${money(hc)}.`;burst(t.color)}
+    else{const pen=Math.round(hc/2);pay(S.cur,pen,'pot');res=`Not quite. ${money(pen)} penalty into the Bonus pot.`}}
+  else if(k==='challenge'){if(ok){res=`Challenge won! ${t.name} pays no rent.`;burst(t.color)}else{pay(S.cur,c.r*2,c.to);res=`Challenge lost. ${t.name} pays double rent: ${money(c.r*2)} to ${S.teams[c.to].name}.`}}
+  else if(k==='pop'){if(ok){t.money+=100;res=`Correct! ${t.name} wins ${money(100)}.`;burst(t.color)}else res='Not this time. No reward.'}
+  else if(k==='real'){if(ok){t.money+=150;res=`Great call! ${t.name} earns ${money(150)}.`;burst(t.color)}else{pay(S.cur,75,'pot');res=`Not the best choice. ${money(75)} into the Bonus pot.`}}
+  else if(k==='jail'){if(ok){t.jail=false;let extra='';if(t.money<100){t.money+=100;extra=` Study grant: +${money(100)}.`}res=`Correct! ${t.name} escapes the Revision Room.${extra}`;burst(t.color)}
+    else{t.jailTurns++;res=`Not yet. ${t.name} stays in the Revision Room.`;if(t.jailTurns>=3){t.jail=false;res+=' (Released after 3 turns.)'}}}
+  feed(res);S.msg=res;
+  if(k==='jail'&&ok)setActs([act('Roll dice',roll,'go')],[]);else endActs();
+  render()}
+
+function chicken(){if(S.phase!=='question')return;const t=team(),k=S.kind,c=S.ctx;S.revealed=true;S.phase='result';let res;
+  if(k==='buy'){const pen=Math.round(price(c.i)/4);pay(S.cur,pen,'pot');res=`${t.name} chickened out! ${money(pen)} into the Bonus pot.`}
+  else if(k==='house'){const pen=Math.round(HOUSE[BOARD[c.i].u]/4);pay(S.cur,pen,'pot');res=`${t.name} chickened out! ${money(pen)} into the Bonus pot.`}
+  else{pay(S.cur,c.r,c.to);res=`${t.name} backed down and paid the normal rent: ${money(c.r)}.`}
+  feed(res);S.msg=res;endActs();render()}
+
+function awardBonus(k){if(S.phase!=='question')return;S.revealed=true;S.phase='result';let res;
+  if(k>=0){const prize=S.pot+100;S.teams[k].money+=prize;logAns(k,true);res=`${S.teams[k].name} wins the Bonus Round: ${money(prize)}!`;S.pot=0;burst(S.teams[k].color)}
+  else res='No winner. The pot keeps growing!';
+  feed(res);S.msg=res;endActs();render()}
+
+function endTurn(){if(S.busy)return;if(S.timeUp){endGame();return}S.cur=(S.cur+1)%S.teams.length;startTurn()}
+
+function worth(k){let w=S.teams[k].money;for(const i in S.own){const o=S.own[i];if(o.team===k){w+=price(i);if(o.houses)w+=o.houses*HOUSE[BOARD[i].u]}}return w}
+function accBonus(k){const t=S.teams[k];return t.att?Math.round(t.ok/t.att*500):0}
+function endGame(){S.phase='end';S.running=false;
+  S.final=S.teams.map((t,k)=>({k,name:t.name,worth:worth(k),bonus:accBonus(k)})).map(r=>({...r,total:r.worth+r.bonus})).sort((a,b)=>b.total-a.total);
+  S.msg=`Game over! ${S.final[0].name} wins!`;feed(S.msg);burst(S.teams[S.final[0].k].color);burst('#ffd23f');
+  setActs([act('New game',()=>{S.phase='setup';S.own={};S.landed=null;S.q=null;buildBoard();render()},'alt')],[]);render()}
+
+/* ---------- timer ---------- */
+setInterval(()=>{if(!S.running||S.phase==='setup'||S.phase==='end')return;
+  if(S.timeLeft>0){S.timeLeft--;if(S.timeLeft===0){S.timeUp=true;feed("Time's up! Finishing this turn.")}renderTimer()}},1000);
+
+function exportCSV(){const cols=['time','team','category','topic','type','question','correct'];
+  const csv=[cols.join(',')].concat(S.log.map(r=>cols.map(c=>`"${String(r[c]).replace(/"/g,'""')}"`).join(','))).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`tycoon-results-${new Date().toISOString().slice(0,10)}.csv`;a.click()}
+
+/* ---------- rendering ---------- */
+function buildBoard(){let h='';
+  BOARD.forEach((b,i)=>{const g=sqGeom(i);let cls='sq',inner='';
+    if(b.t==='prop')inner=`<div class="strip" style="background:${UNITCOL[b.u]};color:${UNITTXT[b.u]}">Unit ${b.u} · ${esc(nm('U'+b.u))}</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(price(i))}</div>`;
+    else if(b.t==='hub')inner=`<div class="strip" style="background:#1b1b2f;color:#fff">Skills hub</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(200)}</div>`;
+    else if(b.t==='util')inner=`<div class="strip" style="background:#9e9e9e;color:#111">Functional skills</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(150)}</div>`;
+    else{cls+=i%10===0?' corner':' special';
+      const t={go:['GO','Collect '+money(BANK.settings.go||200)+' as you pass'],jail:['Revision Room','Just visiting'],bonus:['Bonus Round','Pot: <span class="pot"></span>'],gojail:['Go to the Revision Room',''],pop:['Pop quiz','Correct = +£100'],real:['Real world','Workplace scenario'],tax:['Late fee','Pay '+money(b.amt||0)]}[b.t];
+      inner=`<div class="big">${t[0]}</div><div class="sub">${t[1]}</div>`}
+    h+=`<div class="${cls}" id="sq${i}" style="left:${g.left}px;width:${g.width}px">${inner}<div class="tok"></div><div class="own"></div></div>`});
+  $('board').innerHTML=h;BOARD.forEach((b,i)=>{const n=document.querySelector(`#sq${i} .nm`);if(n)fit(n,38,24)});renderBoardDyn()}
+
+function renderBoardDyn(){
+  BOARD.forEach((b,i)=>{const el=$('sq'+i);if(!el)return;
+    el.classList.toggle('cur',S.phase!=='setup'&&S.teams[S.cur]&&S.teams[S.cur].pos===i);
+    el.querySelector('.tok').innerHTML=S.teams.map((t,k)=>t.pos===i&&S.phase!=='setup'?`<div class="tk" style="background:${t.color}">${k+1}</div>`:'').join('');
+    const o=S.own[i],ow=el.querySelector('.own');
+    if(o){const t=S.teams[o.team];ow.style.background=t.color;ow.textContent=`${o.team+1}: ${t.name}`+(o.houses===5?' · HOTEL':o.houses?` · ${'■'.repeat(o.houses)}`:'')}
+    else{ow.style.background='transparent';ow.textContent=''}
+    const p=el.querySelector('.pot');if(p)p.textContent=money(S.pot+100)})}
+
+function renderTeams(){for(let k=0;k<6;k++){const el=$('team'+k),t=S.teams[k];
+  if(!t||S.phase==='setup'){el.className='panel team empty';el.innerHTML=`<div class="tname"><span class="badge" style="background:${TEAMCOL[k]}">${k+1}</span>${esc(BANK.teams[k]||'Team '+(k+1))}</div>`+(k<S.nTeams?'<div class="stat" style="margin-top:20px">Ready</div>':'');if(k<S.nTeams)el.className='panel team';continue}
+  el.className='panel team'+(k===S.cur&&S.phase!=='end'?' active':'');
+  const props=Object.keys(S.own).filter(i=>S.own[i].team===k).map(Number).sort((a,b)=>a-b);
+  const acc=t.att?Math.round(t.ok/t.att*100)+'%':'–';
+  el.innerHTML=`<div class="tname"><span class="badge" style="background:${t.color}">${k+1}</span>${esc(t.name)}</div>
+  <div class="money">${money(t.money)}</div>
+  <div class="stat">Accuracy ${acc} (${t.ok}/${t.att})${t.jail?' · IN REVISION ROOM':''}</div>
+  <div class="chips">${props.map(i=>{const b=BOARD[i];const bg=b.t==='prop'?UNITCOL[b.u]:b.t==='hub'?'#cfd8ff':'#bdbdbd',fg=b.t==='prop'?UNITTXT[b.u]:'#1b1b2f';return `<span class="chip" style="background:${bg};color:${fg}">${b.t==='prop'?b.c+' ':''}${esc(label(i))}${S.own[i].houses?' '+(S.own[i].houses===5?'H':'■'.repeat(S.own[i].houses)):''}</span>`}).join('')}</div>`}}
+
+function renderTurn(){const t=team();if(!t)return;
+  $('turn').innerHTML=`<div class="who"><span class="badge" style="background:${t.color}">${S.cur+1}</span>${esc(t.name)}'s turn</div>
+  <div id="dice"><div class="die">${S.dice[0]}</div><div class="die">${S.dice[1]}</div></div><div id="msg">${esc(S.msg)}</div>`;fit($('msg'),40,28)}
+
+function renderDock(id,acts){const el=$(id);el.classList.toggle('many',acts.length>4);
+  el.innerHTML=acts.map((a,n)=>`<button class="btn ${a.cls}" data-n="${n}">${esc(a.label)}</button>`).join('');
+  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const a=acts[+b.dataset.n];if(a&&a.fn)a.fn()})}
+
+function renderQ(){const el=$('qcard');
+  if(S.phase==='end'){el.innerHTML=`<div class="qh">Final result</div><div class="qq" style="font-size:80px">${esc(S.final[0].name)} wins!</div><div class="exp">Total ${money(S.final[0].total)} (net worth ${money(S.final[0].worth)} + accuracy bonus ${money(S.final[0].bonus)}).</div>`;return}
+  if(!S.q){el.innerHTML=`<div class="qh">${esc(BANK.settings.name)}</div><div class="qq" style="font-size:48px">Land on a property and answer a question to buy it.</div>
+  <div class="exp" style="font-size:36px">✓ Correct: pay the price and own it<br>✗ Wrong: pay half the price<br>Chicken out: pay a quarter<br>Owned square: pay rent, or challenge (right = free, wrong = double)</div>`;return}
+  const q=S.q;
+  const opts=q.opts.length?`<div class="opts">${q.opts.map(o=>{let c='opt',mark='';if(S.revealed&&o.L===q.ans){c+=' right';mark=' ✓'}else if(S.revealed&&o.L===S.chosen){c+=' wrong';mark=' ✗'}
+    return `<div class="${c}" data-l="${o.L}"><b>${o.L}</b><span>${esc(o.text)}${mark}</span></div>`}).join('')}</div>`:'';
+  const ans=S.revealed&&!q.opts.length&&q.ans?`<div class="exp"><b>Answer:</b> ${esc(q.ans)}</div>`:'';
+  const exp=S.revealed&&q.exp?`<div class="exp">${esc(q.exp)}</div>`:'';
+  el.innerHTML=`<div class="qh">${esc(S.qtitle||'')}</div><div class="qq" id="qq">${esc(q.q)}</div>${opts}${ans}${exp}`;
+  el.querySelectorAll('.opt').forEach(o=>o.onclick=()=>chooseOpt(o.dataset.l));
+  const qq=$('qq');qq.style.fontSize='56px';let f=56;while(el.scrollHeight>el.clientHeight&&f>30){f-=2;qq.style.fontSize=f+'px'}
+  if(el.scrollHeight>el.clientHeight)el.querySelectorAll('.opt').forEach(o=>o.style.fontSize='30px')}
+
+function renderInfo(){const el=$('info'),i=S.landed;
+  if(i==null||S.phase==='setup'){el.innerHTML='<h2>This square</h2><div class="stat" style="font-size:34px">Details of the square the current team lands on appear here.</div>';return}
+  const b=BOARD[i];let h=`<h2>This square</h2>`;
+  if(['prop','hub','util'].includes(b.t)){h+=`<div style="font-size:46px;font-weight:600;line-height:1.1">${esc(longLabel(i))}</div><div style="font-size:36px;margin-top:14px">Price ${money(price(i))}</div>`;
+    if(b.t==='prop')h+=`<div style="font-size:30px;margin-top:10px;color:#cfd8ff;line-height:1.35">Rent ${money(PR[b.c][1][0])} (double with the full unit)<br>Houses 1–4: ${PR[b.c][1].slice(1,5).map(money).join(' / ')}<br>Hotel: ${money(PR[b.c][1][5])} · House cost ${money(HOUSE[b.u])}</div>`;
+    if(b.t==='hub')h+=`<div style="font-size:30px;margin-top:10px;color:#cfd8ff">Rent £25 / £50 / £100 / £200 for 1–4 hubs owned</div>`;
+    if(b.t==='util')h+=`<div style="font-size:30px;margin-top:10px;color:#cfd8ff">Rent: dice × 4, or dice × 10 if both owned</div>`;
+    const o=S.own[i];h+=`<div style="font-size:38px;margin-top:16px">${o?'Owner: '+esc(S.teams[o.team].name):'Unowned'}</div>`}
+  else h+=`<div style="font-size:46px;font-weight:600">${{go:'GO',jail:'Revision Room',bonus:'Bonus Round',gojail:'Go to Revision Room',pop:'Pop quiz',real:'Real world',tax:'Late fee'}[b.t]}</div>`;
+  el.innerHTML=h}
+
+function renderFeed(){$('feed').innerHTML='<h2>What\'s happening</h2>'+S.feed.slice(0,9).map(f=>`<div>${esc(f)}</div>`).join('')}
+
+function renderLeader(){const el=$('leader');
+  if(S.phase==='setup'){el.innerHTML=`<h2>Leaderboard</h2><div style="font-size:40px">Waiting for the game to start…</div>`;return}
+  if(S.phase==='end'){el.innerHTML='<h2>Final standings</h2>'+S.final.map((r,n)=>`<div class="lb-row"><span class="badge" style="background:${TEAMCOL[r.k]}">${r.k+1}</span><span class="n">${n+1}. ${esc(r.name)}</span><span class="s">${money(r.worth)} + ${money(r.bonus)}</span><span class="v">${money(r.total)}</span></div>`).join('')+'<div style="font-size:28px;margin-top:10px;color:#cfd8ff">Net worth + accuracy bonus (up to £500)</div>';return}
+  const rows=S.teams.map((t,k)=>({k,t,w:worth(k)})).sort((a,b)=>b.w-a.w);
+  el.innerHTML='<h2>Leaderboard</h2>'+rows.map((r,n)=>`<div class="lb-row"><span class="badge" style="background:${r.t.color}">${r.k+1}</span><span class="n">${n+1}. ${esc(r.t.name)}</span><span class="s">${r.t.att?Math.round(r.t.ok/r.t.att*100)+'% right':''}</span><span class="v">${money(r.w)}</span></div>`).join('')}
+
+function renderTimer(){const el=$('timer');const m=Math.floor(S.timeLeft/60),s=S.timeLeft%60;
+  if(S.phase==='setup'){el.innerHTML=`<h2>Timer</h2><div class="t">${S.minutes}:00</div>`;return}
+  if(!$('tval')){el.innerHTML=`<div style="display:flex;gap:30px;align-items:center"><div><h2 style="margin:0">Time left</h2><div class="t" id="tval"></div></div><div style="display:flex;flex-direction:column;gap:8px;margin-left:auto">
+    <button class="btn sm alt" id="tpause"></button><button class="btn sm no" id="tend">End game</button><button class="btn sm" id="texp">Export results</button></div></div>`;
+    $('tpause').onclick=()=>{S.running=!S.running;renderTimer()};$('tend').onclick=()=>{if(S.phase!=='end'&&!S.busy)endGame()};$('texp').onclick=exportCSV}
+  $('tval').textContent=S.phase==='end'?'Done':S.timeUp?"Time's up":`${m}:${String(s).padStart(2,'0')}`;
+  $('tpause').textContent=S.running?'Pause':'Resume';$('tpause').classList.toggle('hide',S.phase==='end')}
+
+function renderHeat(){const el=$('heatp');const st={};CATS.forEach(c=>st[c]={ok:0,n:0});
+  S.log.forEach(r=>{if(st[r.cat]){st[r.cat].n++;if(r.correct==='Yes')st[r.cat].ok++}});
+  el.innerHTML='<h2 style="font-size:36px;margin-bottom:4px">How the class is doing</h2><div class="heat">'+CATS.map(c=>{const v=st[c],p=v.n?Math.round(v.ok/v.n*100):null;
+    return `<div class="hrow"><span>${esc(catName(c))}: ${p==null?'–':p+'% ('+v.ok+'/'+v.n+')'}</span><div class="hbar"><i style="width:${p||0}%"></i></div></div>`}).join('')+'</div>'}
+
+function renderSetup(){const on=S.phase==='setup';['setupL','setupR'].forEach(id=>$(id).classList.toggle('hide',!on));['turn','qcard','dockA','dockB'].forEach(id=>$(id).classList.toggle('hide',on));
+  if(!on)return;
+  $('setupL').innerHTML=`<h2 style="font-size:64px">${esc(BANK.settings.name)}</h2>
+   <div class="setrow">Number of teams</div><div style="display:flex;gap:16px">${[2,3,4,5,6].map(n=>`<button class="btn sm ${n===S.nTeams?'sel go':''}" style="width:160px;height:110px;font-size:56px" onclick="S.nTeams=${n};render()">${n===S.nTeams?'✓':''}${n}</button>`).join('')}</div>
+   <div class="setrow">Game length (minutes)</div><div style="display:flex;gap:16px">${[30,45,60,75].map(n=>`<button class="btn sm ${n===S.minutes?'sel go':''}" style="width:190px;height:110px;font-size:52px" onclick="S.minutes=${n};render()">${n===S.minutes?'✓':''}${n}</button>`).join('')}</div>`;
+  $('setupR').innerHTML=`<h2>Questions</h2><div style="font-size:38px;line-height:1.3">${esc(BANKSRC)}<br><span style="color:#cfd8ff">${BANK.questions.length} questions loaded</span></div>
+   <div style="display:flex;gap:16px;margin-top:24px"><button class="btn alt" style="height:120px;font-size:42px" onclick="$('file').click()">Load Excel file</button></div>
+   <div style="display:flex;gap:16px;margin-top:60px"><button class="btn go" style="height:170px;font-size:70px;padding:0 70px" onclick="startGame()">Start game</button></div>`}
+
+function render(){renderSetup();renderTeams();renderBoardDyn();renderFeed();renderLeader();renderTimer();renderHeat();renderInfo();
+  if(S.phase!=='setup'){renderTurn();renderQ();renderDock('dockA',S.actA);renderDock('dockB',S.actB)}}
+
+function fit(el,max,min){let f=max;el.style.fontSize=f+'px';while(el.scrollHeight>el.clientHeight+1&&f>min){f-=2;el.style.fontSize=f+'px'}}
+
+/* ---------- Excel loading (built-in reader, no internet needed) ---------- */
+async function unzip(buf){const d=new DataView(buf),u8=new Uint8Array(buf),files={};let e=buf.byteLength-22;
+  while(e>=0&&d.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('Not an Excel file');
+  let p=d.getUint32(e+16,true);const n=d.getUint16(e+10,true);const td=new TextDecoder();
+  for(let k=0;k<n;k++){const method=d.getUint16(p+10,true),cs=d.getUint32(p+20,true),nl=d.getUint16(p+28,true),xl=d.getUint16(p+30,true),cl=d.getUint16(p+32,true),off=d.getUint32(p+42,true);
+    const name=td.decode(u8.subarray(p+46,p+46+nl));p+=46+nl+xl+cl;
+    const ds=off+30+d.getUint16(off+26,true)+d.getUint16(off+28,true),raw=u8.slice(ds,ds+cs);
+    files[name]={method,raw}}
+  return async name=>{const f=files[name];if(!f)return null;
+    if(f.method===0)return new TextDecoder().decode(f.raw);
+    const s=new Blob([f.raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'));return await new Response(s).text()}}
+async function readXlsx(buf){const get=await unzip(buf),X=t=>new DOMParser().parseFromString(t,'application/xml');
+  const wb=X(await get('xl/workbook.xml')),rels=X(await get('xl/_rels/workbook.xml.rels'));
+  const relMap={};[...rels.getElementsByTagName('Relationship')].forEach(r=>relMap[r.getAttribute('Id')]=r.getAttribute('Target'));
+  const ssx=await get('xl/sharedStrings.xml');const ss=ssx?[...X(ssx).getElementsByTagName('si')].map(si=>[...si.getElementsByTagName('t')].map(t=>t.textContent).join('')):[];
+  const col=r=>{let c=0;for(const ch of r.replace(/\d+/g,''))c=c*26+ch.charCodeAt(0)-64;return c-1};
+  const out={};
+  for(const sh of wb.getElementsByTagName('sheet')){let t=relMap[sh.getAttribute('r:id')]||'';t=t.startsWith('/')?t.slice(1):'xl/'+t;
+    const x=await get(t);if(!x)continue;const grid=[];
+    for(const row of X(x).getElementsByTagName('row')){const r=[];
+      for(const c of row.getElementsByTagName('c')){const ty=c.getAttribute('t'),v=c.getElementsByTagName('v')[0];let val='';
+        if(ty==='s'&&v)val=ss[+v.textContent]||'';else if(ty==='inlineStr')val=[...c.getElementsByTagName('t')].map(z=>z.textContent).join('');else if(v)val=v.textContent;
+        r[col(c.getAttribute('r'))]=val}
+      grid[(+row.getAttribute('r')||grid.length+1)-1]=r}
+    const head=(grid[0]||[]).map(h=>String(h||'').trim());
+    out[sh.getAttribute('name').trim().toLowerCase()]=grid.slice(1).filter(Boolean).map(r=>{const o={};head.forEach((h,i)=>{if(h)o[h]=r[i]==null?'':r[i]});return o})}
+  return out}
+function parseWorkbook(sheets){
+  const get=n=>sheets[n]||[];
+  const out=JSON.parse(JSON.stringify(SAMPLE));
+  get('settings').forEach(r=>{const k=String(r.Setting||'').trim().toLowerCase(),v=r.Value;
+    if(k==='game name'&&String(v).trim())out.settings.name=String(v).trim();if(k==='starting money')out.settings.start=+v||1500;if(k==='go money')out.settings.go=+v||200;if(k==='minutes')out.settings.minutes=+v||60});
+  get('teams').forEach((r,k)=>{const v=String(r['Team name']||'').trim();if(v&&k<6)out.teams[k]=v});
+  get('names').forEach(r=>{const c=String(r.Code||'').trim().toUpperCase(),v=String(r.Name||'').trim();if(c&&v)out.names[c]=v});
+  const qs=get('questions').filter(r=>String(r.Question||'').trim()).map((r,n)=>{
+    const opts=['A','B','C','D'].map(L=>({L,text:String(r['Option '+L]||'').trim()})).filter(o=>o.text);
+    let ans=String(r.Answer||'').trim();if(opts.length&&/^[a-d]$/i.test(ans))ans=ans.toUpperCase();
+    return {id:'x'+n,topic:String(r.Topic||'ANY').trim().toUpperCase()||'ANY',level:parseInt(r.Level)||1,q:String(r.Question).trim(),opts,ans,exp:String(r.Explanation||'').trim()}});
+  if(qs.length)out.questions=qs;
+  return out}
+async function useWorkbook(buf,src){try{BANK=parseWorkbook(await readXlsx(buf));BANKSRC=src;S.minutes=BANK.settings.minutes||S.minutes;buildBoard();render()}
+  catch(e){console.warn(e);BANKSRC='Could not read that file (is it .xlsx?). Still using the previous questions.';render()}}
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>useWorkbook(r.result,'Loaded: '+f.name);r.readAsArrayBuffer(f);e.target.value=''};
+(function autoLoad(){if(!/^https?:/.test(location.protocol))return;
+  const url=new URLSearchParams(location.search).get('q')||'questions.xlsx';
+  fetch(url,{cache:'no-store'}).then(r=>r.ok?r.arrayBuffer():null).then(b=>{if(b&&S.phase==='setup')useWorkbook(b,'Loaded from '+url.split('/').pop())}).catch(()=>{})})();
+
+/* ---------- floor ambience ---------- */
+const cv=$('floorcv'),cx=cv.getContext('2d');const bubbles=[],parts=[];
+for(let i=0;i<55;i++)bubbles.push({x:Math.random()*2847,y:Math.random()*3436,r:40+Math.random()*140,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2,c:UNITCOL[1+rnd(8)]});
+function burst(c){for(let i=0;i<140;i++){const a=Math.random()*6.283,s=8+Math.random()*26;parts.push({x:1423,y:1718,vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:14+Math.random()*26,c,life:100})}}
+(function loop(){cx.fillStyle='#0d1530';cx.fillRect(0,0,2847,3436);
+  cx.globalAlpha=.22;bubbles.forEach(b=>{b.x+=b.vx;b.y+=b.vy;if(b.x<-200)b.x=3047;if(b.x>3047)b.x=-200;if(b.y<-200)b.y=3636;if(b.y>3636)b.y=-200;cx.fillStyle=b.c;cx.beginPath();cx.arc(b.x,b.y,b.r,0,6.283);cx.fill()});
+  for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx;p.y+=p.vy;p.vx*=.97;p.vy*=.97;p.life--;cx.globalAlpha=Math.max(p.life/100,0);cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fill();if(p.life<=0)parts.splice(i,1)}
+  cx.globalAlpha=1;requestAnimationFrame(loop)})();
+
+/* ---------- scale to window ---------- */
+function scaleStage(){const native=new URLSearchParams(location.search).has('native');const s=native?1:Math.min(innerWidth/12566,innerHeight/4516);$('stage').style.transform=`scale(${s})`}
+addEventListener('resize',scaleStage);scaleStage();
+buildBoard();render();
+</script>
+</body>
+</html>
