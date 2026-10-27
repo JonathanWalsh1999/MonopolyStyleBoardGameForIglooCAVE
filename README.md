@@ -84,7 +84,14 @@ Open questions with no options stay on the wall only. Turn the floor zones off w
   The active event shows on the turn panel.
 - **Class debrief:** when the game ends, press **Most-missed questions** to see the 5 questions the class got wrong most, with the right answers. It's handy for a 2-minute recap.
 
-## Money, loans and the Jackpot
+## Everything in plain pounds
+
+Students never have to work out "half", "double" or "dice × 8" themselves:
+- **Every question card shows the outcomes in pounds** before anyone answers, for example *✓ Pay £450 and own it · ✗ Pay a £230 fine · 🐔 Chicken out: £110 fine*. Confident mode shows its own amounts.
+- **Rent always says why**, for example *"Rent is £100 (they own 2 hubs)"* or *"Rent is £56 (you rolled 7, and 7 × £8 = £56)"*, plus exactly what a challenge would cost.
+- **Fines are rounded to the nearest £10.**
+- The **This square** panel uses three plain lines instead of a table of numbers.
+
 
 - **Cash is king:** the winner is the team with the most **cash minus debt** when the market closes. Property is worth nothing at the end: it only earns rent while the game runs. So buy squares that will pay back in time, and don't borrow more than you can repay.
 - **Prices and rent:** properties cost £400–£800. Base rent is a wildcard: some squares have high rent for their price, others are pricey with low rent. Each square shows its price and base rent, but nothing flags which are the bargains, so teams have to work it out. Houses multiply the rent (×3, ×6, ×10, ×13; hotel ×16).
