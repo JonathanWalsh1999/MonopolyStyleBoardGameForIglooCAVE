@@ -70,6 +70,8 @@ Open questions with no options stay on the wall only. Turn the floor zones off w
   - **Payday loan** (£250 or £500): instant, 40% interest per lap, capped once interest reaches 100% of the loan. That mirrors the real UK rule that you never repay more than double what you borrowed, and real payday APRs run into the thousands.
   - Interest is added every time a team passes GO. Repay any loan from the Loans menu once there's enough cash. Debt counts against net worth.
 
+- **Repaying:** press **Loans**, then **Repay** next to a loan. Teams can pay £100, £250 or £500 off at a time, or pay the whole loan off if they have the cash. Paying part of a loan shrinks the amount interest is charged on, so the next lap's interest is smaller.
+
 ## Fair turns
 
 - **60 seconds per question.** A countdown shows on the question card and ticks for the last 10 seconds. Running out of time counts as a wrong answer, except for the hotel "teach it back", where the tutor decides.
