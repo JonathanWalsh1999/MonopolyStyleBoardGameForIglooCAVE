@@ -46,16 +46,19 @@ Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level quest
 
 ## Companies, sound and dice
 
-- **Intro:** on the setup screen, pick the companies, then press **▶ Play intro**. It's a ~80-second movie-trailer cold open: a voiceover, a company roll call with logos slamming onto every wall, rapid-fire rules, and a "shout the answer" warm-up for the whole room. It then opens the market automatically. **Skip intro ›** jumps straight in, and **Skip to game** skips it entirely.
+- **Intro:** on the setup screen, pick the companies, then press **▶ Play intro**. It's a movie-trailer cold open of about 110 seconds, paced so everyone can follow. It has a voiceover, a company roll call with logos slamming onto every wall, the rules, and a "shout the answer" warm-up for the whole room. It then opens the market automatically. **Skip intro ›** jumps straight in, and **Skip to game** skips it entirely.
 - **Companies:** teams play as six parody companies (Amazoom, Costalot Coffee, Greggles, TokTik, Primarket, Nandoughs). Tap the ones playing (2–6); the order you tap is the turn order. To use your own logos, see `assets/logos/README.md`.
 - **Host:** a dry, witty British host with several versions of each line. He never repeats a recent line and stays quiet on some routine moments so it doesn't get old.
-- **Music:** a lo-fi city soundtrack is generated live in the browser. It gets quieter while the host speaks or a question is up and has its own **Music: on/off** button.
+- **Music:** a lo-fi city soundtrack is generated live in the browser. It drops right down while the host speaks or a question is up, and has its own **Music: on/off** button. The host's voice is loudness-boosted, and sound effects play quieter while he's talking.
 - **Dice:** **Roll dice** uses the on-screen dice; **Physical dice** lets you tap the total from real dice (2–12).
 
 ## Money, loans and the Jackpot
 
-- **Cash vs net worth:** each team panel shows **Cash** (what they can spend) and **Net worth** (cash + property value − debt). Buying a property swaps cash for property, so net worth stays the same; the leaderboard ranks net worth.
-- **Jackpot:** penalties, late fees and chicken-outs go into the Jackpot (it starts at £100). Landing on **Bonus Round** opens a question to every team; the first correct answer wins it all. It's shown on the Bonus Round square, the ticker and the leaderboard.
+- **Cash is king:** the winner is the team with the most **cash minus debt** when the market closes. Property is worth nothing at the end: it only earns rent while the game runs. So buy squares that will pay back in time, and don't borrow more than you can repay.
+- **Prices and rent:** properties cost £400–£800. Base rent is a wildcard: **▲** squares have high rent for their price, and **▼** squares are trophy buys with low rent. Each square shows its price and rent. Houses multiply the rent (×3, ×6, ×10, ×13; hotel ×16).
+- **Life Happens** (3 squares): a random real-life bill or windfall. The bills are an HMRC tax bill (20% of your cash), a broken boiler (£600), a speeding fine (£400), a cracked phone (£250), council tax (£300) and a failed MOT (£500). The windfalls are a tax refund (+£300), a viral post (+£400) and selling old trainers (+£150). Bills go into the Jackpot.
+- **Can't pay?** An **automatic payday loan** covers the shortfall at 40% per lap. That debt comes off your final score.
+- **Jackpot:** penalties, bills and chicken-outs go into the Jackpot (it starts at £100). Landing on **Bonus Round** opens a question to every team; the first correct answer wins it all.
 - **Loans** (the **Loans** button at the start or end of a turn, or **Get a loan** when a property is unaffordable):
   - **Bank loan** (£250 or £500): 10% interest per lap, but the team must answer a money question correctly to be approved. A wrong answer costs nothing.
   - **Payday loan** (£250 or £500): instant, 40% interest per lap, capped once interest reaches 100% of the loan. That mirrors the real UK rule that you never repay more than double what you borrowed, and real payday APRs run into the thousands.
@@ -65,7 +68,7 @@ Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level quest
 
 - **60 seconds per question.** A countdown shows on the question card and ticks for the last 10 seconds. Running out of time counts as a wrong answer, except for the hotel "teach it back", where the tutor decides.
 - **Equal turns:** when the game clock runs out, the current round finishes, then there's one **Final round** so every company gets one last turn. Every company ends with exactly the same number of turns. This can run a few minutes past the clock, so set the game length a little shorter than the lesson. **End now** on the back wall stops immediately if needed.
-- **Revision Room:** on its turn, a team in the Revision Room presses **Answer to escape**. A correct answer gets them out and they roll straight away. Wrong answers cost nothing. They get one attempt per turn and are released after 3 attempts.
+- **Revision Room:** *landing* on it means just visiting, so nothing happens. Only a team **sent** there by the *Go to the Revision Room* square is locked in; its token gets a red outline. On its next turn it can't roll. It presses **Answer to escape**, and a correct answer gets it out, then it rolls straight away. Wrong answers cost nothing. There's one attempt per turn, and the team is released after 3 attempts.
 
 ### Replacing a sound
 Upload an MP3 to `assets/audio` with the same file name as the one you're replacing (for example `host_buy_1.mp3`).
@@ -80,10 +83,11 @@ Upload an MP3 to `assets/audio` with the same file name as the one you're replac
 - **Own a whole unit:** you can build houses. Houses 1–2 bring level 2 questions, houses 3–4 bring level 3, and a hotel is a "teach it back" challenge judged by the tutor.
 - **Pop quiz:** +£100 for a correct answer.
 - **Real world:** +£150 if right, −£75 if wrong.
-- **Late fee:** goes into the pot.
+- **Life Happens:** a random bill or windfall (see above).
 - **Bonus Round:** an open question for every team. The tutor clicks the winner, who takes the pot + £100.
-- **Revision Room:** answer a question to get out; teams are freed automatically after 3 turns. A team that runs out of money goes here instead of being knocked out, and gets a £100 study grant when it escapes.
-- **End:** when the timer hits zero, the current turn finishes. The winner has the highest **net worth + accuracy bonus** (up to £500).
+- **Revision Room:** see *Fair turns* above.
+- **End:** when the clock hits zero, the round finishes and then there's one final round. The winner has the most **cash minus debt**. Game lengths are 15, 30, 45, 60 or 75 minutes.
+- **Questions:** a challenger never gets the same question the owner answered to buy that square.
 - **Export results:** downloads a CSV of every answer by team and topic, which is useful as impact evidence. If downloads are blocked inside the Igloo webview, run the game in a normal browser on the Igloo PC instead.
 
 ## Known limits
