@@ -52,6 +52,12 @@ Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level quest
 - **Music:** a lo-fi city soundtrack is generated live in the browser. It drops right down while the host speaks or a question is up, and has its own **Music: on/off** button. The host's voice is loudness-boosted, and sound effects play quieter while he's talking.
 - **Dice:** **Roll dice** uses the on-screen dice; **Physical dice** lets you tap the total from real dice (2–12).
 
+## Stand on your answer
+
+Multiple-choice questions also appear on the **floor** as big zones, one per option. Each zone has its own letter, shape and colour (● A, ▲ B, ■ C, ★ D), so colour-blind players can tell them apart. The team walks onto its answer, and the tutor taps that option, either on the front wall or on the floor zone itself. The right zone then lights up with **✓ CORRECT**, and a wrong pick is marked **✗ WRONG**. In the Bonus Round, every team races to stand on the answer.
+
+Open questions with no options stay on the wall only. Turn the floor zones off with **Answers on the floor** on the setup screen (the setting is remembered on that PC).
+
 ## Money, loans and the Jackpot
 
 - **Cash is king:** the winner is the team with the most **cash minus debt** when the market closes. Property is worth nothing at the end: it only earns rent while the game runs. So buy squares that will pay back in time, and don't borrow more than you can repay.
