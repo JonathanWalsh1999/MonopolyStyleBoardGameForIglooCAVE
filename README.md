@@ -1,4 +1,4 @@
-# Monster Tycoon – Igloo CAVE edition
+# Campus Tycoon – Igloo CAVE edition
 
 A Monopoly-style learning game for the Igloo CAVE webview layer.
 Canvas size: **12,566 × 4,516 px** (8 wall projectors + 2 floor projectors).
@@ -44,11 +44,13 @@ Two ways to load it:
 
 Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level questions shared across a unit, and are good for the harder house questions. The other codes are `HUB1`–`HUB4`, `MATHS`, `ENGLISH`, `POPQUIZ`, `REALWORLD`, `REVISION`, `BONUS` and `ANY`.
 
-## Monsters, sound and dice
+## Companies, sound and dice
 
-- **Monsters:** on the setup screen, tap the monsters that are playing (2–6). The order you tap them is the turn order. To use your own artwork, see `assets/characters/README.md`.
-- **Sound:** the game-show host and sound effects were made with ElevenLabs and live in `assets/audio`. Use the **Sound: on/off** button on the back wall to mute them. If a clip is missing, the game plays a simple built-in beep instead.
-- **Dice:** press **Roll dice** for the on-screen 3D dice, or **Physical dice** to type in the total from your real dice (2–12).
+- **Companies:** teams play as six parody companies (Amazoom, Costalot Coffee, Greggles, TokTik, Primarket, Nandoughs). On the setup screen, tap the ones playing (2–6); the order you tap is the turn order. To use your own logos, see `assets/logos/README.md`.
+- **Host and sound:** a dry, witty British host plus sound effects, all made with ElevenLabs and stored in `assets/audio`. **Sound: on/off** mutes everything.
+- **Music:** a lo-fi city soundtrack is generated live in the browser (no file needed). It starts on the first tap, gets quieter while the host speaks or a question is up, and has its own **Music: on/off** button.
+- **Dice:** **Roll dice** uses the on-screen dice; **Physical dice** lets you tap the total from real dice (2–12).
+- **Revision Room:** on its turn, a team in the Revision Room presses **Answer to escape**. A correct answer gets them out and they roll straight away. Wrong answers cost nothing. They get one attempt per turn and are released after 3 attempts.
 
 ### Replacing a sound
 Upload an MP3 to `assets/audio` with the same file name as the one you're replacing (for example `host_buy_1.mp3`).

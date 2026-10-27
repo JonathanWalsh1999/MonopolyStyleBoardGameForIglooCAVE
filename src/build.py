@@ -6,7 +6,7 @@ from openpyxl.worksheet.datavalidation import DataValidation
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 os.makedirs(OUT, exist_ok=True)
 
-SETTINGS = {"name": "Monster Tycoon", "start": 1500, "go": 200, "minutes": 60}
+SETTINGS = {"name": "Campus Tycoon", "start": 1500, "go": 200, "minutes": 60}
 TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"]
 NAMES = {
     "U1": "Science", "1A": "The Solar System", "1B": "The Human Body",
