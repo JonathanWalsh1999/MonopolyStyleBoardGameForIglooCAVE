@@ -68,6 +68,7 @@ Open questions with no options stay on the wall only. Turn the floor zones off w
   - Pop Quiz: £200, or −£100 if wrong.
   - Real World: £300, or −£150 if wrong.
   **Show options** skips the wait.
+- **⚡ Speed bonus / 🔥 Confidence bonus (+£50):** any correct answer in the first 10 seconds earns an extra £50. A correct answer after going 🔥 Confident always earns it too, on top of the double reward, because the team committed before seeing the options. Usually that means answering from memory before the options appear. Just tap **✓ Correct** as soon as they say it.
 - **Explain why (+£50):** after a correct answer, the explanation stays hidden while the team explains *why* it's right. The tutor taps **✓ Explained why** (+£50) or **Skip**, and then the explanation appears.
 - **Comeback questions:** questions anyone gets wrong go into a pile. They come back in Pop Quiz and the Revision Room (marked *Comeback question*), so the class gets a second go at what it didn't know.
 - **Breaking news:** every 10 minutes, a market event hits everyone. Some last one round:
