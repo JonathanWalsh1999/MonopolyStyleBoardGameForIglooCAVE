@@ -316,7 +316,8 @@ const RECENT=[];
 const PRIO={timeup:3,finalround:3,news:3,steal:3,jackpot:3,stolen:2,autoloan:2,taxman:2,eventbad:2,eventgood:2,revision:2,escape:2,hotel:2,cwon:2,clost:2,bankok:2,bankno:2,timeout:2};
 const HQ=[];
 function prio(ev){return ev.startsWith('win_')?4:PRIO[ev]||1}
-function host(ev,delay=0,chance=1){const list=HOST[ev];if(!list||Math.random()>chance)return;
+let SPOKE=false;
+function host(ev,delay=0,chance=1){const list=HOST[ev];if(!list||Math.random()>chance)return;SPOKE=true;
   setTimeout(()=>{if(muted)return;
     if(talking()){HQ.push({ev,p:prio(ev),t:Date.now()});HQ.sort((a,b)=>b.p-a.p||a.t-b.t);if(HQ.length>2)HQ.length=2;return}
     sayNow(ev)},delay)}
@@ -578,10 +579,10 @@ function showOpts(){if(!S.optsHidden)return;S.optsHidden=false;setActs([],S.actB
 function goConfident(){if(!S.optsHidden)return;S.conf=true;banner('CONFIDENT ×2');play('sfx_slam',{vol:.6});host('confident',200);showOpts()}
 /* every question shows exactly what happens, in pounds – no 'half' or 'double' to work out */
 function outcomes(){const k=S.kind,c=S.ctx||{},cf=S.conf,B=SPEED_BONUS,r10=v=>Math.round(v/10)*10;
-  if(k==='buy'){const p=price(c.i);return cf?[['✓',`Own it for ${money(r10(p*.75))} + ${money(B)} bonus`],['✗',`Pay a ${money(p)} fine`]]:[['✓',`Pay ${money(p)} and own it`],['✗',`Pay a ${money(r10(p/2))} fine`],['🐔',`Chicken out: ${money(r10(p/4))} fine`]]}
-  if(k==='challenge')return cf?[['✓',`${S.teams[c.to].name} pays YOU ${money(c.r)} + ${money(B)} bonus`],['✗',`Pay ${money(c.r*4)} rent`]]:[['✓','Pay £0 rent'],['✗',`Pay ${money(c.r*2)} rent`],['🐔',`Chicken out: pay ${money(c.r)}`]];
+  if(k==='buy'){const p=price(c.i);return cf?[['✓',`Own it for just ${money(r10(p*.75))} – and win ${money(B)}`],['✗',`Pay a ${money(p)} fine`]]:[['✓',`Pay ${money(p)} and own it`],['✗',`Pay a ${money(r10(p/2))} fine`],['🐔',`Chicken out: ${money(r10(p/4))} fine`]]}
+  if(k==='challenge')return cf?[['✓',`${S.teams[c.to].name} pays YOU ${money(c.r+B)}`],['✗',`Pay ${money(c.r*4)} rent`]]:[['✓','Pay £0 rent'],['✗',`Pay ${money(c.r*2)} rent`],['🐔',`Chicken out: pay ${money(c.r)}`]];
   if(k==='house'){const h=HOUSE[BOARD[c.i].u];if(String(S.q.id).startsWith('teach'))return [['✓',`Build the hotel for ${money(h)}`],['✗',`Pay a ${money(r10(h/2))} fine`]];
-    return cf?[['✓',`Build it for ${money(r10(h/2))} + ${money(B)} bonus`],['✗',`Pay a ${money(h)} fine`]]:[['✓',`Pay ${money(h)} and build it`],['✗',`Pay a ${money(r10(h/2))} fine`],['🐔',`Chicken out: ${money(r10(h/4))} fine`]]}
+    return cf?[['✓',`Build it for just ${money(r10(h/2))} – and win ${money(B)}`],['✗',`Pay a ${money(h)} fine`]]:[['✓',`Pay ${money(h)} and build it`],['✗',`Pay a ${money(r10(h/2))} fine`],['🐔',`Chicken out: ${money(r10(h/4))} fine`]]}
   if(k==='pop')return cf?[['✓',`Win ${money(200+B)}`],['✗','Pay a £100 fine']]:[['✓','Win £100'],['✗','Nothing happens']];
   if(k==='real')return cf?[['✓',`Win ${money(300+B)}`],['✗','Pay a £150 fine']]:[['✓','Win £150'],['✗','Pay a £75 fine']];
   if(k==='jail')return [['✓','You\'re out – roll the dice'],['✗','Stay in (it costs nothing)']];
@@ -602,12 +603,12 @@ function logAns(teamIdx,ok){const k=S.kind,c=S.ctx;const cat=['buy','challenge',
   S.log.push({time:new Date().toLocaleTimeString('en-GB'),team:t.name,category:catName(cat)||'Revision',topic:c&&c.i!=null?longLabel(c.i):'',type:k,question:S.q.q,correct:ok?'Yes':'No',cat,qid:S.q.id})}
 
 function realQ(q){return q&&q.id!=='none'&&!String(q.id).startsWith('teach')}
-function judge(ok){if(S.phase!=='question')return;const t=team(),k=S.kind,c=S.ctx,to=S.timedOut,conf=S.conf;S.timedOut=false;S.revealed=true;S.optsHidden=false;S.phase='result';logAns(S.cur,ok);let res='',steal=false;
+function judge(ok){if(S.phase!=='question')return;SPOKE=false;const t=team(),k=S.kind,c=S.ctx,to=S.timedOut,conf=S.conf;S.timedOut=false;S.revealed=true;S.optsHidden=false;S.phase='result';logAns(S.cur,ok);let res='',steal=false;
   if(!ok&&realQ(S.q)&&S.q.opts.length&&!S.missed.includes(S.q.id))S.missed.push(S.q.id);
   thinking(false);cheer(ok);floorMood(ok?'happy':'sad',ok?'▲ CORRECT':'▼ WRONG');
   const C=conf?'Confident and correct! ':'',W=conf?'Confident… and wrong. ':'Wrong. ';
   if(k==='buy'){const p=price(c.i);
-    if(ok){const cost=conf?Math.round(p*.75/10)*10:p;pay(S.cur,cost,'bank');S.own[c.i]={team:S.cur,houses:0,qid:S.q.id};res=`${C||'Correct. '}${t.name} buys ${label(c.i)} for ${money(cost)}${conf?' (25% off)':''}.`;burstSquare(c.i,t.color);host('buy',700,.75)}
+    if(ok){const cost=conf?Math.round(p*.75/10)*10:p;pay(S.cur,cost,'bank');S.own[c.i]={team:S.cur,houses:0,qid:S.q.id};res=`${C||'Correct. '}${t.name} buys ${label(c.i)} for ${conf?'just ':''}${money(cost)}.`;burstSquare(c.i,t.color);host('buy',700,.75)}
     else{const pen=conf?p:Math.round(p/20)*10;pay(S.cur,pen,'pot');res=`${W}${t.name} pays a ${money(pen)} penalty into the Jackpot.`;
       steal=S.teams.some((x,n)=>n!==S.cur&&!x.jail&&x.money>=p);if(!to&&!steal)host('wrong',700,.75)}}
   else if(k==='house'){const full=HOUSE[BOARD[c.i].u];
@@ -624,14 +625,14 @@ function judge(ok){if(S.phase!=='question')return;const t=team(),k=S.kind,c=S.ct
     if(ok){t.jail=false;let extra='';if(t.money<100){t.money+=100;moneyFx(S.cur,100);extra=` Study grant: +${money(100)}.`}res=`Correct. ${t.name} is out of the Revision Room – roll the dice.${extra}`;host('escape',700);banner('RELEASED')}
     else if(t.jailTurns>=JAIL_TRIES){t.jail=false;res=`Wrong, but that was attempt ${JAIL_TRIES} of ${JAIL_TRIES}. ${t.name} is released and moves next turn.`}
     else res=`Wrong. ${t.name} stays in the Revision Room. ${JAIL_TRIES-t.jailTurns} attempt${JAIL_TRIES-t.jailTurns>1?'s':''} left (one per turn).`}
-  if(ok&&!to&&realQ(S.q)&&['buy','challenge','house','pop','real','jail'].includes(k)&&(conf||ANSWER_SECS-S.qLeft<=SPEED_SECS)){t.money+=SPEED_BONUS;const lbl=conf?'🔥 CONFIDENCE BONUS':'⚡ SPEED BONUS';setTimeout(()=>{moneyFx(S.cur,SPEED_BONUS);popText(lbl,$('team'+S.cur).offsetLeft+40,820,'#E8B84A')},700);res+=conf?` 🔥 Confidence bonus: +${money(SPEED_BONUS)}.`:` ⚡ Speed bonus: +${money(SPEED_BONUS)} for answering in ${ANSWER_SECS-S.qLeft}s.`}
+  if(ok&&!to&&realQ(S.q)&&['buy','challenge','house','pop','real','jail'].includes(k)&&(conf||ANSWER_SECS-S.qLeft<=SPEED_SECS)){t.money+=SPEED_BONUS;const lbl=conf?'🔥 CONFIDENCE BONUS':'⚡ SPEED BONUS';setTimeout(()=>{moneyFx(S.cur,SPEED_BONUS);popText(lbl,$('team'+S.cur).offsetLeft+40,820,'#E8B84A')},700);res+=conf?` 🔥 And ${t.name} wins a ${money(SPEED_BONUS)} confidence bonus.`:` ⚡ And ${t.name} wins a ${money(SPEED_BONUS)} speed bonus for answering in ${ANSWER_SECS-S.qLeft}s.`}
   S.conf=false;
   if(to){res='Out of time. '+res;if(!steal)host('timeout',600)}
   feed(res);S.msg=res;
   if(k==='bank'){S.loanBack();return}
   if(steal){startSteal(res);return}
   if(k==='jail'&&ok)setActs(rollActs(),[]);else endActs();
-  if(ok&&realQ(S.q)&&['buy','challenge','house','pop','real','jail'].includes(k)){S.whyOpen=true;host('why',2600,.35);
+  if(ok&&realQ(S.q)&&['buy','challenge','house','pop','real','jail'].includes(k)){S.whyOpen=true;if(!SPOKE)host('why',1200,.6);
     S.actB=[act('✓ Explained why: +£50',()=>whyDone(true),'go'),act('Skip',()=>whyDone(false),'no')];}
   render()}
 function whyDone(ok){if(!S.whyOpen)return;S.whyOpen=false;const t=team();if(ok){t.money+=50;moneyFx(S.cur,50);feed(`${t.name} explained why: +${money(50)}.`);play('sfx_correct',{vol:.5});S.msg=`Nice explanation. ${t.name} earns ${money(50)}.`}S.actB=[];render()}
@@ -820,7 +821,7 @@ function renderSetup(){const on=S.phase==='setup';['setupL','setupR'].forEach(id
    <div style="display:flex;gap:16px;margin-top:24px"><button class="btn alt" style="height:110px;font-size:40px" onclick="$('file').click()">Load Excel file</button></div>
    <div style="display:flex;gap:20px;margin-top:50px"><button class="btn alt" style="height:160px;font-size:52px;padding:0 44px" onclick="playIntro()">▶ Play intro</button><button class="btn" style="height:160px;font-size:52px;padding:0 44px" onclick="startGame()">Skip to game</button></div>
    <div style="margin-top:30px"><button class="btn sm ${FLOORQ?'go':'alt'}" style="height:100px;font-size:38px;padding:0 36px" onclick="toggleFloorQ()">${FLOORQ?'✓ ':''}Answers on the floor: ${FLOORQ?'on':'off'}</button></div>
-   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 9.4 (every amount spelled out)</div>`}
+   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 9.5</div>`}
 
 /* ---------- trailer-style intro ---------- */
 const wait=ms=>new Promise(r=>{let left=ms;const tick=()=>{if(!S.introOn||left<=0){r();return}if(!S.introPaused)left-=50;setTimeout(tick,50)};tick()});
