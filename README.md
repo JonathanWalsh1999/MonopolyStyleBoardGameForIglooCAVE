@@ -46,7 +46,7 @@ Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level quest
 
 ## Companies, sound and dice
 
-- **Intro:** on the setup screen, pick the companies, then press **▶ Play intro**. It's a movie-trailer cold open of about 110 seconds, paced so everyone can follow. It has a voiceover, a company roll call with logos slamming onto every wall, the rules, and a "shout the answer" warm-up for the whole room. It then opens the market automatically. **Skip intro ›** jumps straight in, and **Skip to game** skips it entirely.
+- **Intro:** on the setup screen, pick the companies, then press **▶ Play intro**. It's a movie-trailer cold open of about 110 seconds, paced so everyone can follow. It has a voiceover, a company roll call with logos slamming onto every wall, the rules, and a "shout the answer" warm-up for the whole room. It then opens the market automatically. **Skip intro ›** jumps straight in, and **Skip to game** skips it entirely. During a game, **Replay intro** on the back wall plays it again. The game clock pauses, and play carries on where it left off afterwards.
 - **Companies:** teams play as six parody companies (Amazoom, Costalot Coffee, Greggles, TokTik, Primarket, Nandoughs). Tap the ones playing (2–6); the order you tap is the turn order. To use your own logos, see `assets/logos/README.md`.
 - **Host:** a dry, witty British host with several versions of each line. He never repeats a recent line and stays quiet on some routine moments so it doesn't get old.
 - **Music:** a lo-fi city soundtrack is generated live in the browser. It drops right down while the host speaks or a question is up, and has its own **Music: on/off** button. The host's voice is loudness-boosted, and sound effects play quieter while he's talking.
@@ -55,7 +55,7 @@ Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level quest
 ## Money, loans and the Jackpot
 
 - **Cash is king:** the winner is the team with the most **cash minus debt** when the market closes. Property is worth nothing at the end: it only earns rent while the game runs. So buy squares that will pay back in time, and don't borrow more than you can repay.
-- **Prices and rent:** properties cost £400–£800. Base rent is a wildcard: **▲** squares have high rent for their price, and **▼** squares are trophy buys with low rent. Each square shows its price and rent. Houses multiply the rent (×3, ×6, ×10, ×13; hotel ×16).
+- **Prices and rent:** properties cost £400–£800. Base rent is a wildcard: some squares have high rent for their price, others are pricey with low rent. Each square shows its price and base rent, but nothing flags which are the bargains, so teams have to work it out. Houses multiply the rent (×3, ×6, ×10, ×13; hotel ×16).
 - **Life Happens** (3 squares): a random real-life bill or windfall. The bills are an HMRC tax bill (20% of your cash), a broken boiler (£600), a speeding fine (£400), a cracked phone (£250), council tax (£300) and a failed MOT (£500). The windfalls are a tax refund (+£300), a viral post (+£400) and selling old trainers (+£150). Bills go into the Jackpot.
 - **Can't pay?** An **automatic payday loan** covers the shortfall at 40% per lap. That debt comes off your final score.
 - **Jackpot:** penalties, bills and chicken-outs go into the Jackpot (it starts at £100). Landing on **Bonus Round** opens a question to every team; the first correct answer wins it all.

@@ -576,7 +576,7 @@ function exportCSV(){const cols=['time','team','category','topic','type','questi
 /* ---------- rendering ---------- */
 function buildBoard(){let h='';
   BOARD.forEach((b,i)=>{const g=sqGeom(i);let cls='sq',inner='';
-    if(b.t==='prop')inner=`<div class="strip" style="background:${UNITCOL[b.u]};color:${UNITTXT[b.u]}">UNIT ${b.u} · ${esc(nm('U'+b.u)).toUpperCase()}</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(price(i))} <span class="rn ${rentKind(b.c)}">· rent ${money(PR[b.c][1])}${rentKind(b.c)==='hi'?' ▲':rentKind(b.c)==='lo'?' ▼':''}</span></div>`;
+    if(b.t==='prop')inner=`<div class="strip" style="background:${UNITCOL[b.u]};color:${UNITTXT[b.u]}">UNIT ${b.u} · ${esc(nm('U'+b.u)).toUpperCase()}</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(price(i))} <span class="rn">· rent ${money(PR[b.c][1])}</span></div>`;
     else if(b.t==='hub')inner=`<div class="strip" style="background:#E8ECF8;color:#0a0f1c">SKILLS HUB</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(HUB_PRICE)} <span class="rn">· rent ${money(HUB_RENT[0])}+</span></div>`;
     else if(b.t==='util')inner=`<div class="strip" style="background:#6B7280;color:#fff">FUNCTIONAL SKILLS</div><div class="nm">${esc(nm(b.c))}</div><div class="pr">${money(UTIL_PRICE)} <span class="rn">· dice × 8</span></div>`;
     else{cls+=i%10===0?' corner':' special';
@@ -643,7 +643,7 @@ function renderInfo(){const el=$('info'),i=S.landed;
   if(i==null||S.phase==='setup'){el.innerHTML='<h2>This square</h2><div class="stat" style="font-size:32px;color:var(--muted)">Details of the square the current company lands on appear here.</div>';return}
   const b=BOARD[i];let h=`<h2>This square</h2>`;
   if(['prop','hub','util'].includes(b.t)){h+=`<div style="font:800 44px Montserrat,Arial;line-height:1.1">${esc(longLabel(i))}</div><div style="font-size:36px;margin-top:14px;color:var(--gold)">Price ${money(price(i))}</div>`;
-    if(b.t==='prop'){const rt=rentTable(b.c),k=rentKind(b.c);h+=`<div style="font-size:29px;margin-top:10px;color:var(--muted);line-height:1.4">${k?`<b style="color:${k==='hi'?'#34D399':'#F87171'}">${k==='hi'?'HIGH RENT for the price':'LOW RENT for the price'}</b><br>`:''}Rent ${money(rt[0])} (double with the full unit)<br>Houses 1–4: ${rt.slice(1,5).map(money).join(' / ')}<br>Hotel: ${money(rt[5])} · House cost ${money(HOUSE[b.u])}</div>`}
+    if(b.t==='prop'){const rt=rentTable(b.c);h+=`<div style="font-size:29px;margin-top:10px;color:var(--muted);line-height:1.4">Rent ${money(rt[0])} (double with the full unit)<br>Houses 1–4: ${rt.slice(1,5).map(money).join(' / ')}<br>Hotel: ${money(rt[5])} · House cost ${money(HOUSE[b.u])}</div>`}
     if(b.t==='hub')h+=`<div style="font-size:29px;margin-top:10px;color:var(--muted)">Rent £50 / £100 / £150 / £250 for 1–4 hubs owned</div>`;
     if(b.t==='util')h+=`<div style="font-size:29px;margin-top:10px;color:var(--muted)">Rent: dice × 8, or dice × 20 if both owned</div>`;
     const o=S.own[i];h+=`<div style="font-size:36px;margin-top:16px">${o?'Owner: '+esc(S.teams[o.team].name):'Unowned'}</div>`}
@@ -665,7 +665,7 @@ function renderTimer(){const el=$('timer');const m=Math.floor(S.timeLeft/60),s=S
   const snd=`<button class="btn sm alt" onclick="toggleSound()">${muted?'Sound: off':'Sound: on'}</button><button class="btn sm alt" onclick="toggleMusic()">${MUS.on?'Music: on':'Music: off'}</button>`;
   if(S.phase==='setup'){el.innerHTML=`<div style="display:flex;align-items:center;gap:20px"><div><h2>Timer</h2><div class="t">${S.minutes}:00</div></div><div style="display:grid;gap:8px;margin-left:auto">${snd}</div></div>`;return}
   if(!$('tval')){el.innerHTML=`<div style="display:flex;gap:20px;align-items:center"><div><h2 style="margin:0">Time left</h2><div class="t" id="tval"></div></div><div id="tbtns" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-left:auto"></div></div>`}
-  $('tbtns').innerHTML=`${S.phase==='end'?'':`<button class="btn sm alt" onclick="S.running=!S.running;renderTimer()">${S.running?'Pause':'Resume'}</button>`}<button class="btn sm no" onclick="if(S.phase!=='end'&&!S.busy)endGame()">End now</button><button class="btn sm" onclick="exportCSV()">Export</button>${snd}`;
+  $('tbtns').innerHTML=`${S.phase==='end'?'':`<button class="btn sm alt" onclick="S.running=!S.running;renderTimer()">${S.running?'Pause':'Resume'}</button>`}<button class="btn sm no" onclick="if(S.phase!=='end'&&!S.busy)endGame()">End now</button><button class="btn sm" onclick="exportCSV()">Export</button>${snd}${S.phase==='end'?'':'<button class="btn sm alt" onclick="if(!S.busy)playIntro()">Replay intro</button>'}`;
   $('tval').textContent=S.phase==='end'?'Done':S.timeUp?"Time's up":`${m}:${String(s).padStart(2,'0')}`}
 
 function renderHeat(){const el=$('heatp');const st={};CATS.forEach(c=>st[c]={ok:0,n:0});
@@ -682,7 +682,7 @@ function renderSetup(){const on=S.phase==='setup';['setupL','setupR'].forEach(id
   $('setupR').innerHTML=`<h2>Questions</h2><div style="font-size:36px;line-height:1.3">${esc(BANKSRC)}<br><span style="color:var(--muted)">${BANK.questions.length} questions loaded</span></div>
    <div style="display:flex;gap:16px;margin-top:24px"><button class="btn alt" style="height:110px;font-size:40px" onclick="$('file').click()">Load Excel file</button></div>
    <div style="display:flex;gap:20px;margin-top:50px"><button class="btn alt" style="height:160px;font-size:52px;padding:0 44px" onclick="playIntro()">▶ Play intro</button><button class="btn" style="height:160px;font-size:52px;padding:0 44px" onclick="startGame()">Skip to game</button></div>
-   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 8 (cash wins, Life Happens, louder host)</div>`}
+   <div style="position:absolute;right:30px;bottom:20px;font-size:26px;color:var(--muted)">Version 8.1 (replay intro)</div>`}
 
 /* ---------- trailer-style intro ---------- */
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
@@ -690,7 +690,7 @@ const INTRO_PACE=1.35,INTRO_RATE=.94,INTRO_GAP=1400;
 function IW(html,idx){document.querySelectorAll('.iw').forEach((el,k)=>{if(idx==null||idx===k){el.innerHTML=`<div class="in">${html}</div>`}})}
 function IF(html){$('ifloor').innerHTML=html?`<div class="in">${html}</div>`:''}
 async function seq(clipKey,frames){const p=clip(clipKey);for(const [ms,w,f,fx] of frames){await wait(ms*INTRO_PACE);if(!S.introOn)return;if(w!=null)IW(w);if(f!==undefined)IF(f);if(fx)fx()}await p;await wait(INTRO_GAP)}
-async function playIntro(){ac();startMusic();S.phase='intro';S.introOn=true;$('intro').classList.remove('hide');IW('');IF('');
+async function playIntro(){ac();startMusic();S.replay=S.phase!=='setup'?{phase:S.phase}:null;if(S.replay)thinking(false);S.phase='intro';S.introOn=true;$('intro').classList.remove('hide');IW('');IF('');
   const on=()=>S.introOn;
   play('sfx_riser',{vol:.7});await wait(1800);if(!on())return;
   await seq('intro_1',[[0,'<div class="it">IN A CITY</div><div class="is">where knowledge is money…</div>'],[3300,'<div class="it gold">SIX COMPANIES<br>WILL RISE</div>'],[2500,'<div class="it red">MOST WILL FALL</div>'],[1900,'<div class="it gold">ONE WILL OWN<br>EVERYTHING</div>',undefined,()=>play('sfx_slam')]]);if(!on())return;
@@ -710,6 +710,7 @@ async function playIntro(){ac();startMusic();S.phase='intro';S.introOn=true;$('i
   await seq('intro_9',[[0,'<div class="it">WELL DONE.<br>YOU CAN MULTIPLY.</div>'],[2400,'<div class="it gold">NOW LET\'S MAKE<br>SOME MONEY</div>'],[1600,'<div class="it gold" style="font-size:200px">OPEN THE<br>MARKET</div>',undefined,()=>play('sfx_slam')]]);
   if(on())endIntro(true)}
 function endIntro(start){if(!S.introOn)return;S.introOn=false;$('intro').classList.add('hide');IW('');IF('');if(hostNow)hostNow.pause();duck(false);
+  if(S.replay){S.phase=S.replay.phase;S.replay=null;if(S.phase==='question')thinking(true);render();return}
   if(start)startGame(true);else{S.phase='setup';render()}}
 
 function render(){renderSetup();renderTeams();renderBoardDyn();renderFeed();renderLeader();renderTimer();renderHeat();renderInfo();renderTicker();
