@@ -42,7 +42,7 @@ Two ways to load it:
 - **On GitHub Pages**, replace `questions.xlsx` in the repository. It loads automatically when the game opens.
   You can also point at a different file with `?q=other-file.xlsx`.
 
-Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level questions shared across a unit, and are good for the harder house questions. The other codes are `HUB1`–`HUB4`, `MATHS`, `ENGLISH`, `POPQUIZ`, `REALWORLD`, `REVISION`, `BONUS` and `ANY`.
+Topic codes: `1A`–`8B` are the 22 properties. `U1`–`U8` are unit-level questions shared across a unit, and are good for the harder level-up questions. The other codes are `HUB1`–`HUB4`, `MATHS`, `ENGLISH`, `POPQUIZ`, `REALWORLD`, `REVISION`, `BONUS` and `ANY`.
 
 ## Companies, sound and dice
 
@@ -61,7 +61,7 @@ Open questions with no options stay on the wall only. Turn the floor zones off w
 ## Keeping the whole room in it (v9)
 
 - **Steal it:** if a team gets a *buy* question wrong, the answer isn't revealed. Instead the other teams race to stand on the right answer on the floor (20 seconds). The tutor taps **"<Team> steals it"** for the first team on the right zone, and that team buys the square at its price. Only teams that can afford it are offered.
-- **⚡ Say it early (+£50):** for buy, rent challenge, house, Pop Quiz and Real World questions, the question appears first and the options follow 10 seconds later. A team that says the right answer before the options appear (within 10 seconds) wins £50 extra. The tutor just taps **✓ Correct** as soon as they say it. **Show options now** skips the wait.
+- **⚡ Say it early (+£50):** for buy, rent challenge, level-up, Pop Quiz and Real World questions, the question appears first and the options follow 10 seconds later. A team that says the right answer before the options appear (within 10 seconds) wins £50 extra. The tutor just taps **✓ Correct** as soon as they say it. **Show options now** skips the wait.
 - **Explain why (+£50):** after a correct answer, the explanation stays hidden while the team explains *why* it's right. The tutor taps **✓ Explained why** (+£50) or **Skip**, and then the explanation appears.
 - **Comeback questions:** questions anyone gets wrong go into a pile. They come back in Pop Quiz and the Revision Room (marked *Comeback question*), so the class gets a second go at what it didn't know.
 - **Breaking news:** every 10 minutes, a market event hits everyone. Some last one round:
@@ -86,7 +86,7 @@ Students never have to work out "half", "double" or "dice × 8" themselves:
 
 
 - **Cash is king:** the winner is the team with the most **cash minus debt** when the market closes. Property is worth nothing at the end: it only earns rent while the game runs. So buy squares that will pay back in time, and don't borrow more than you can repay.
-- **Prices and rent:** properties cost £400–£800. Base rent is a wildcard: some squares have high rent for their price, others are pricey with low rent. Each square shows its price and base rent, but nothing flags which are the bargains, so teams have to work it out. Houses multiply the rent (×3, ×6, ×10, ×13; hotel ×16).
+- **Prices and rent:** properties cost £400–£800. Base rent is a wildcard: some squares have high rent for their price, others are pricey with low rent. Each square shows its price and base rent, but nothing flags which are the bargains, so teams have to work it out. Star levels multiply the rent (★ ×3, ★★ ×6, ★★★ ×10, ★★★★ ×13, 👑 ×16).
 - **Life Happens** (3 squares): a random real-life bill or windfall. The bills are an HMRC tax bill (20% of your cash), a broken boiler (£600), a speeding fine (£400), a cracked phone (£250), council tax (£300) and a failed MOT (£500). The windfalls are a tax refund (+£300), a viral post (+£400) and selling old trainers (+£150). Bills go into the Jackpot.
 - **Can't pay?** An **automatic payday loan** covers the shortfall at 40% per lap. That debt comes off your final score.
 - **Jackpot:** penalties, bills and chicken-outs go into the Jackpot (it starts at £100). Landing on **Bonus Round** opens a question to every team; the first correct answer wins it all.
@@ -99,7 +99,7 @@ Students never have to work out "half", "double" or "dice × 8" themselves:
 
 ## Fair turns
 
-- **60 seconds per question.** A countdown shows on the question card and ticks for the last 10 seconds. Running out of time counts as a wrong answer, except for the hotel "teach it back", where the tutor decides.
+- **60 seconds per question.** A countdown shows on the question card and ticks for the last 10 seconds. Running out of time counts as a wrong answer, except for the 👑 Mastered "teach it back", where the tutor decides.
 - **Equal turns:** when the game clock runs out, the current round finishes, then there's one **Final round** so every company gets one last turn. Every company ends with exactly the same number of turns. This can run a few minutes past the clock, so set the game length a little shorter than the lesson. **End now** on the back wall stops immediately if needed.
 - **Revision Room:** *landing* on it means just visiting, so nothing happens. Only a team **sent** there by the *Go to the Revision Room* square is locked in; its token gets a red outline. On its next turn it can't roll. It presses **Answer to escape**, and a correct answer gets it out, then it rolls straight away. Wrong answers cost nothing. There's one attempt per turn, and the team is released after 3 attempts.
 
@@ -116,8 +116,13 @@ Upload an MP3 to `assets/audio` with the same file name as the one you're replac
 - **🏆 Own a whole unit (every square in one colour):**
   - A **"UNIT COMPLETE!"** moment: a banner, fanfare, and the unit's squares light up.
   - A one-off **+£200 bonus** (only the first team to complete each unit gets it).
-  - **Double rent** on those squares while they have no houses.
-  - You can **build houses**. Houses 1–2 bring level 2 questions, houses 3–4 bring level 3, and a hotel is a "teach it back" challenge judged by the tutor.
+  - **Double rent** on those squares while they have no stars.
+  - **⭐ Level up:** at the start of a turn (before rolling), the team presses **⭐ Level up a square**, picks one of that unit's squares, and answers a harder question. If they're right, they pay the cost and the square gains a star, so its rent goes up.
+    - **★ and ★★:** level 2 questions.
+    - **★★★ and ★★★★:** level 3 questions.
+    - **👑 Mastered:** a "teach it back" challenge that you judge.
+    - Every option shows what changes, for example *"World Capitals: ★ → ★★ (rent £180 → £360)"*.
+    - (These are Monopoly's "houses" and "hotel", renamed so nobody needs to know Monopoly.)
   - Each team's panel shows **🎯 1 away from Unit X: needs [square]** when they own all but one square of a unit and that last one is still for sale, so everyone can see who's close (and who to block).
 - **Pop quiz:** +£100 for a correct answer.
 - **Real world:** +£150 if right, −£75 if wrong.
