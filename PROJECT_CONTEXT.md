@@ -126,7 +126,7 @@ A Monopoly-style educational board game for **further-education college students
 
 - Every question has a 60-second clock. Running out of time counts as wrong.
 - **Buy:** answer to buy. Right = pay the price. Wrong = a fine of half the price. Chicken out = a quarter. Fines are rounded to £10 and go into the **Jackpot**.
-- **Rent:** pay it, or **challenge**. Right = pay £0. Wrong = exactly double the rent shown that turn. Chicken out = the normal rent.
+- **Rent:** pay it, or **challenge** with a **level 2 question not yet asked this game** (`chainForChallenge`). Right = pay **half** (`halfRent`, rounded to £1, paid to the owner). Wrong = exactly double. Chicken out = the normal rent. *(v9.7: changed from "right = £0", because students always challenged and owning wasn't worth it.)*
 - **Houses:** level 2 questions for houses 1–2 and level 3 for houses 3–4. A **hotel** needs a teach-back that the tutor judges.
 - **Options hidden for 10 seconds** (buy, challenge, house, Pop Quiz, Real World). Saying the right answer before they appear wins **+£50**. **Show options now** skips the wait.
 - **Explain why:** after a right answer, the tutor can award **+£50** for a good explanation. The explanation text stays hidden until the tutor decides.
@@ -180,6 +180,8 @@ A Monopoly-style educational board game for **further-education college students
 - The voice was quiet and mumbly, so all clips were loudness-normalised and the music ducks harder.
 - The user is colour blind, so the floor zones use letter plus shape plus colour, with a colour-blind-safe palette.
 - The challenger never gets the same question the owner answered to buy that square.
+- **v9.7 no-repeat picker:** `pickQ` tries each pool for an unasked question, and every chain ends with `['*',null]` (the whole bank). A question only repeats once everything in reach has been asked, starting with the oldest (`S.usedAt`). Previously, only the square's own 3 questions recycled.
+- **v9.7 re-recorded lines (Michael):** intro_4 ("…get it right, and you only pay half…") and host_challenge_won 1–3.
 
 ## 8. Open items and next steps
 

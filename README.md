@@ -112,7 +112,7 @@ Upload an MP3 to `assets/audio` with the same file name as the one you're replac
   - To buy, they answer a question. **Correct:** they pay the price and own it.
   - **Wrong:** they pay half the price. **Chicken out:** they pay a quarter.
   - Penalties go into the **Bonus Round pot**.
-- **Someone else's property:** pay the rent, or **challenge**. A correct answer means no rent; a wrong one means double rent. Chickening out of a challenge means paying the normal rent.
+- **Someone else's property:** pay the rent, or **challenge** with a **harder (level 2) question that hasn't come up yet this game**. A correct answer means paying **half** the rent; a wrong one means **double**. Chickening out of a challenge means paying the normal rent. The owner always earns something.
 - **Own a whole unit:** you can build houses. Houses 1–2 bring level 2 questions, houses 3–4 bring level 3, and a hotel is a "teach it back" challenge judged by the tutor.
 - **Pop quiz:** +£100 for a correct answer.
 - **Real world:** +£150 if right, −£75 if wrong.
@@ -121,6 +121,7 @@ Upload an MP3 to `assets/audio` with the same file name as the one you're replac
 - **Revision Room:** see *Fair turns* above.
 - **End:** when the clock hits zero, the round finishes and then there's one final round. The winner has the most **cash minus debt**. Game lengths are 15, 30, 45, 60 or 75 minutes.
 - **Questions:** a challenger never gets the same question the owner answered to buy that square.
+- **No repeats until the bank runs out:** when a square's own questions are used up, the game moves on to that unit's questions, then to anything else in the bank. A question only comes up again once every question has been used, starting with the one asked longest ago. **More questions in the Excel file means fewer repeats.**
 - **Export results:** downloads a CSV of every answer by team and topic, which is useful as impact evidence. If downloads are blocked inside the Igloo webview, run the game in a normal browser on the Igloo PC instead.
 
 ## Known limits
