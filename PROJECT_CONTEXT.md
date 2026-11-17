@@ -181,6 +181,7 @@ A Monopoly-style educational board game for **further-education college students
 - The user is colour blind, so the floor zones use letter plus shape plus colour, with a colour-blind-safe palette.
 - The challenger never gets the same question the owner answered to buy that square.
 - **v9.7 no-repeat picker:** `pickQ` tries each pool for an unasked question, and every chain ends with `['*',null]` (the whole bank). A question only repeats once everything in reach has been asked, starting with the oldest (`S.usedAt`). Previously, only the square's own 3 questions recycled.
+- **v9.8 unit complete:** `setBonus(k,i)` is called after a buy or steal. The first time a team owns all of a unit (`S.setDone[u]`), they get +£200 (`SET_BONUS`), a banner, fanfare, bursts on the unit's squares, a feed line, and the host line `unitdone` (host_unit_complete). Team panels show "🏆 Owns all of Unit X" and, via `nearSets(k)`, "🎯 1 away from Unit X: needs …". The rules panel line was added. (The existing rewards still apply: double base rent via `ownsSet`, and houses.)
 - **v9.7 re-recorded lines (Michael):** intro_4 ("…get it right, and you only pay half…") and host_challenge_won 1–3.
 
 ## 8. Open items and next steps

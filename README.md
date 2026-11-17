@@ -113,7 +113,12 @@ Upload an MP3 to `assets/audio` with the same file name as the one you're replac
   - **Wrong:** they pay half the price. **Chicken out:** they pay a quarter.
   - Penalties go into the **Bonus Round pot**.
 - **Someone else's property:** pay the rent, or **challenge** with a **harder (level 2) question that hasn't come up yet this game**. A correct answer means paying **half** the rent; a wrong one means **double**. Chickening out of a challenge means paying the normal rent. The owner always earns something.
-- **Own a whole unit:** you can build houses. Houses 1–2 bring level 2 questions, houses 3–4 bring level 3, and a hotel is a "teach it back" challenge judged by the tutor.
+- **🏆 Own a whole unit (every square in one colour):**
+  - A **"UNIT COMPLETE!"** moment: a banner, fanfare, and the unit's squares light up.
+  - A one-off **+£200 bonus** (only the first team to complete each unit gets it).
+  - **Double rent** on those squares while they have no houses.
+  - You can **build houses**. Houses 1–2 bring level 2 questions, houses 3–4 bring level 3, and a hotel is a "teach it back" challenge judged by the tutor.
+  - Each team's panel shows **🎯 1 away from Unit X: needs [square]** when they own all but one square of a unit and that last one is still for sale, so everyone can see who's close (and who to block).
 - **Pop quiz:** +£100 for a correct answer.
 - **Real world:** +£150 if right, −£75 if wrong.
 - **Life Happens:** a random bill or windfall (see above).
