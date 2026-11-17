@@ -377,8 +377,8 @@ const SET_BONUS=200;
 function setBonus(k,i){const b=BOARD[i];if(!b||b.t!=='prop'||!ownsSet(k,b.u))return '';S.setDone=S.setDone||{};if(S.setDone[b.u]!=null)return '';S.setDone[b.u]=k;
   const t=S.teams[k];t.money+=SET_BONUS;moneyFx(k,SET_BONUS);
   setTimeout(()=>{unitSquares(b.u).forEach((j,n)=>setTimeout(()=>burstSquare(j,UNITCOL[b.u]),n*250));sweep(UNITCOL[b.u],14);banner(`UNIT ${b.u} COMPLETE!`);play('sfx_fanfare',{vol:.8});host('unitdone',300)},1200);
-  feed(`🏆 ${t.name} owns all of Unit ${b.u}! +${money(SET_BONUS)} bonus, double rent, and they can now build houses.`);
-  return ` 🏆 UNIT ${b.u} COMPLETE! ${t.name} gets a ${money(SET_BONUS)} bonus. From now on, rent on these squares is doubled, and they can build houses.`}
+  feed(`🏆 ${t.name} owns all of Unit ${b.u}! +${money(SET_BONUS)} bonus and double rent. Next: 🏠 Build house (before rolling) to raise the rent further.`);
+  return ` 🏆 UNIT ${b.u} COMPLETE! ${t.name} gets a ${money(SET_BONUS)} bonus. From now on, rent on these squares is doubled. And they can now build houses to raise the rent even more: press 🏠 Build house at the start of a turn, before rolling.`}
 /* a unit where the team owns every square but one, and that last one is still for sale */
 function nearSets(k){const out=[];for(let u=1;u<=8;u++){const sq=unitSquares(u),mine=sq.filter(i=>S.own[i]&&S.own[i].team===k),left=sq.filter(i=>!S.own[i]);if(mine.length&&mine.length===sq.length-1&&left.length===1)out.push({u,i:left[0]})}return out}
 function rent(i){const o=S.own[i],b=BOARD[i];
@@ -479,7 +479,7 @@ function startTurn(first,quiet,soon){
     setActs([act('Answer to escape',()=>ask('jail',{}),'go')],[])}
   else{S.msg=`${t.name}, roll the dice.`;setActs(rollActs(),[]);if(!quiet)host('turn_'+t.mon,first?4800:soon?2600:0,first||soon?1:.6)}
   render()}
-function rollActs(){return [act('Roll dice',()=>roll(),'go'),act('Physical dice',chooseTotal,'alt'),act('Loans',()=>loanMenu(()=>{S.msg=`${team().name}, roll the dice.`;setActs(rollActs(),[]);render()}),'')].concat(canBuild(S.cur)?[act('Build house',chooseBuild,'alt')]:[])}
+function rollActs(){return [act('Roll dice',()=>roll(),'go'),act('Physical dice',chooseTotal,'alt'),act('Loans',()=>loanMenu(()=>{S.msg=`${team().name}, roll the dice.`;setActs(rollActs(),[]);render()}),'')].concat(canBuild(S.cur)?[act('🏠 Build house',chooseBuild,'alt')]:[])}
 function chooseTotal(){S.msg=`Roll your real dice, then tap the total.`;const a=[];for(let n=2;n<=12;n++)a.push(act(String(n),()=>roll(n),'num'));a.push(act('Back',()=>{setActs(rollActs(),[]);S.msg=`${team().name}, roll the dice.`;render()},'no'));setActs(a,[]);render()}
 
 let cubeSpin=[0,0];
@@ -521,7 +521,7 @@ function lifeCard(){const t=team();if(!S.lifeDeck.length)S.lifeDeck=LIFE.map((_,
   if(e.bad){S.msg=`Life happens: ${e.t}. ${t.name} pays ${money(amt)} into the Jackpot.`;host(e.tax?'taxman':'eventbad',200);setTimeout(()=>play('sfx_sad',{vol:.4,max:2.2}),400);floorMood('sad','−'+money(amt));pay(S.cur,amt,'pot')}
   else{t.money+=amt;moneyFx(S.cur,amt);S.msg=`Life happens: ${e.t}. ${t.name} gets ${money(amt)}.`;host('eventgood',200);setTimeout(()=>play('sfx_happy',{vol:.4,max:2.2}),400);floorMood('happy','+'+money(amt))}
   feed(`${t.name}: ${e.t} (${e.bad?'−':'+'}${money(amt)})`);endActs();render()}
-function endActs(){setActs([act('End turn',endTurn),act('Loans',()=>loanMenu(endActs),'')].concat(canBuild(S.cur)?[act('Build house',chooseBuild,'alt')]:[]),[])}
+function endActs(){setActs([act('End turn',endTurn),act('Loans',()=>loanMenu(endActs),'')].concat(canBuild(S.cur)?[act('🏠 Build house',chooseBuild,'alt')]:[]),[])}
 
 /* ---------- loans ---------- */
 function debt(k){return (S.teams[k].loans||[]).reduce((a,l)=>a+l.owed,0)}
@@ -767,7 +767,7 @@ function renderQ(){const el=$('qcard');
   if(!S.q){const t=team(),jail=t&&t.jail;
     if(jail){el.innerHTML=`<div class="qh">Revision Room</div><div class="qq" style="font-size:52px">${esc(t.name)} is locked in.</div><div class="exp" style="font-size:36px;color:var(--txt)">To get out: press <b>Answer to escape</b> and get one question right.<br>One attempt per turn · after ${JAIL_TRIES} attempts you're released anyway.<br>Wrong answers cost nothing.</div>`;return}
     el.innerHTML=`<div class="qh">${esc(BANK.settings.name)} · how it works</div><div class="qq" style="font-size:46px">Land on a property and answer a question to buy it.</div>
-  <div class="exp" style="font-size:32px;color:var(--txt)">✓ Correct: pay the price and own it · ✗ Wrong: pay half · Chicken out: pay a quarter<br>Owned square: pay rent, or challenge (right = half rent, wrong = double)<br>🏆 Own a whole unit: +£200 bonus, double rent, and you can build houses<br>Penalties and bills go into the <b style="color:var(--gold)">Jackpot</b> · ${ANSWER_SECS}s per question<br><b style="color:var(--gold)">Winner = most cash minus debt. Property is worth nothing at the end.</b></div>`;return}
+  <div class="exp" style="font-size:32px;color:var(--txt)">✓ Correct: pay the price and own it · ✗ Wrong: pay half · Chicken out: pay a quarter<br>Owned square: pay rent, or challenge (right = half rent, wrong = double)<br>🏆 Own a whole unit: +£200 bonus, double rent, and you can 🏠 build houses (button before you roll) – each house multiplies the rent<br>Penalties and bills go into the <b style="color:var(--gold)">Jackpot</b> · ${ANSWER_SECS}s per question<br><b style="color:var(--gold)">Winner = most cash minus debt. Property is worth nothing at the end.</b></div>`;return}
   renderFloorQ();const q=S.q;
   const opts=S.optsHidden?`<div class="exp" style="font-size:40px;color:var(--gold)">Options in ${CONF_SECS} seconds… say it now for an extra £50</div>`:q.opts.length?`<div class="opts">${q.opts.map(o=>{let c='opt',mark='';if(S.revealed&&o.L===q.ans){c+=' right';mark=' ✓'}else if(S.revealed&&o.L===S.chosen){c+=' wrong';mark=' ✗'}
     return `<div class="${c}" data-l="${o.L}"><b>${o.L}</b><span>${esc(o.text)}${mark}</span></div>`}).join('')}</div>`:'';
